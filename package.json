@@ -1,0 +1,31 @@
+{
+  "name": "torti",
+  "version": "0.0.1",
+  "description": "Form generator and validator",
+  "main": "index.js",
+  "scripts": {
+    "test": "./run-tests.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shaoner/torti"
+  },
+  "keywords": [
+    "form",
+    "validation",
+    "validator",
+    "generator"
+  ],
+  "author": "Alexandre Laurent <shaoner@gmail.com> (https://github.com/shaoner)",
+  "license": "BSD",
+  "bugs": {
+    "url": "https://github.com/shaoner/torti/issues"
+  },
+  "dependencies": {
+    "validator": "~3.33.0",
+    "lodash": "~3.4.0"
+  },
+  "devDependencies": {
+    "nodeunit": "~0.9.1"
+  }
+}
