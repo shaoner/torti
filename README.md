@@ -11,7 +11,6 @@ npm install torti
 
 ### Example 1: Simple
 
-Let' start with a simple example of what's going on.
 Here we define a simple form with some fields that contain validators and sanity functions.
 
 ```javascript
@@ -24,7 +23,7 @@ var signupForm = Form({
     action: '/signup',
     foo: 'bar',
     fields: [
-        Field({ name: 'email' }).trim().isEmail()
+        Field({ name: 'email' }).trim().isEmail(),
         Field({ name: 'password' }).isLength(6, 25),
         Field({ name: 'password2' }).equals(Field('password')),
         Field({ name: 'username' }).matches('[a-zA-Z_]+')
@@ -184,9 +183,9 @@ var myFields = [
 ];
 ```
 
-* The *name* parameter is mandatory to be able to retrieve your field
-* You can put whatever you want in the field options as shown by the Field password *foo* property.
-* By default, each field is required, you have to call optional validator
+* The *name* property is necessary to be able to retrieve your field
+* You can add your own properties in the options as shown in the Field password
+* By default, each field is required. If you want to make it optional, add the [optional](https://github.com/shaoner/torti/blob/master/lib/README.md#Field#optional) validator
 
 It can also be used as Field('fieldname'), which returns a special function.
 It is basically a way to delay the evaluation of the field value since it has none for now.
@@ -194,11 +193,11 @@ It is basically a way to delay the evaluation of the field value since it has no
 ### 2. [Form](https://github.com/shaoner/torti/blob/master/lib/README.md#Field)
 
 ```javascript
-var myForm = Form({ 'hello': 'world', fields: myFields });
+var myForm = Form({ hello: 'world', fields: myFields });
 ```
 
-* The *field* parameter should be an array of Field
-* You can also put whatever you want in the form options as shown by the *foo* property.
+* The *fields* property should be an array of Field
+* You can also put whatever property you want in the form options
 
 When you want to validate your data, pass it to the form:
 
@@ -231,13 +230,13 @@ console.log(renderer);
 ### 3. [FormRenderer](https://github.com/shaoner/torti/blob/master/lib/README.md#FormRenderer)
 
 The FormRenderer is a class which will contain errors and values since we don't want to contaminate the Field and the Form instances which may be reused.
-This export a very simple object, which contains the fields options, the form options and a Boolean indicating whether the Form is valid or not.
+This gives us a very simple object, which contains the fields options, the form options and a Boolean indicating whether the Form is valid or not.
 It has nothing to do with HTML, it is up to the template engine to handle this.
 However you can define your own FormRenderer with an additional method to display the form and the fields as HTML (but I don't recommand it).
 
 If you want to define your own FormRenderer, take a look at the FormRenderer class, it should have:
-* a addField method to add a field
-* a setField method to receive additional field properties (error and value at least)
+* a [addField](https://github.com/shaoner/torti/blob/master/lib/README.md#FormRenderer#addField) method to add a field
+* a [setField](https://github.com/shaoner/torti/blob/master/lib/README.md#FormRenderer#setField) method to receive additional field properties (error and value at least)
 
 Notice that you cannot display a Field or a Form, you always display a FormRenderer.
 
@@ -245,8 +244,8 @@ Notice that you cannot display a Field or a Form, you always display a FormRende
 
 FieldValidators is a simple object with a string key matching a [validator](https://github.com/chriso/validator.js) function and a string value which is an error.
 For now, this object is global and cannot be defined for each Form.
-However it can be overriden by setting Form.validators to your own object.
-Because of how internationalization works in dust, I didn't want to put explicit error messages, but you're free to do it.
+However it can be overridden by setting Form.validators to your own object.
+Because of how internationalization works in [dust](https://github.com/linkedin/dustjs), I didn't want to put explicit error messages, but you're free to do it.
 
 You can also add your own validator, here is a naive example:
 
@@ -256,13 +255,13 @@ Form.addValidator('is42', function (value) {
     return value == '42';
 }, 'error42');
 
-Form.addValidator('isGreaterThan', function (value, comparison) {
-    return value.length > comparison;
-}, 'error>');
+Form.addValidator('startsWith', function (value, comparison) {
+    return value[0] == comparison;
+}, 'errorStartsWith');
 
 var myFields = [
     Field({ name: 'foo' }).is42(),
-    Field({ name: 'bar' }).isGreaterThan(42)
+    Field({ name: 'bar' }).startsWith('H')
 ];
 
 ```
