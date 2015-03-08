@@ -9,6 +9,8 @@
 <dl>
 <dt><a href="#Field">Field</a></dt>
 <dd></dd>
+<dt><a href="#EmailField">EmailField</a> ⇐ <code><a href="#Field">Field</a></code></dt>
+<dd></dd>
 <dt><a href="#Form">Form</a></dt>
 <dd></dd>
 <dt><a href="#FormRenderer">FormRenderer</a></dt>
@@ -491,6 +493,76 @@ With lowercase set to true, the local part of the email address is lowercased fo
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | [options] | <code>Object</code> | <code>{ lowercase: true }</code> | Options |
+
+<a name="EmailField"></a>
+## EmailField ⇐ <code>[Field](#Field)</code>
+**Extends:** <code>[Field](#Field)</code>  
+**Kind**: global class  
+
+* [EmailField](#EmailField) ⇐ <code>[Field](#Field)</code>
+  * [new EmailField(options)](#new_EmailField_new)
+  * [.optional()](#Field#optional) ⇒ <code>[Field](#Field)</code>
+  * [.validate(value, body)](#Field#validate)
+  * [.equals(comparison)](#Field#equals) ⇒ <code>[Field](#Field)</code>
+  * [.contains(seed)](#Field#contains) ⇒ <code>[Field](#Field)</code>
+  * [.matches(pattern, [modifier])](#Field#matches) ⇒ <code>[Field](#Field)</code>
+  * [.isEmail([options])](#Field#isEmail) ⇒ <code>[Field](#Field)</code>
+  * [.isURL([options])](#Field#isURL) ⇒ <code>[Field](#Field)</code>
+  * [.isFQDN([options])](#Field#isFQDN) ⇒ <code>[Field](#Field)</code>
+  * [.isIP([version])](#Field#isIP) ⇒ <code>[Field](#Field)</code>
+  * [.isAlpha()](#Field#isAlpha) ⇒ <code>[Field](#Field)</code>
+  * [.isNumeric()](#Field#isNumeric) ⇒ <code>[Field](#Field)</code>
+  * [.isAlphanumeric()](#Field#isAlphanumeric) ⇒ <code>[Field](#Field)</code>
+  * [.isBase64()](#Field#isBase64) ⇒ <code>[Field](#Field)</code>
+  * [.isHexadecimal()](#Field#isHexadecimal) ⇒ <code>[Field](#Field)</code>
+  * [.isHexColor()](#Field#isHexColor) ⇒ <code>[Field](#Field)</code>
+  * [.isLowercase()](#Field#isLowercase) ⇒ <code>[Field](#Field)</code>
+  * [.isUppercase()](#Field#isUppercase) ⇒ <code>[Field](#Field)</code>
+  * [.isInt()](#Field#isInt) ⇒ <code>[Field](#Field)</code>
+  * [.isFloat()](#Field#isFloat) ⇒ <code>[Field](#Field)</code>
+  * [.isDivisibleBy(num)](#Field#isDivisibleBy) ⇒ <code>[Field](#Field)</code>
+  * [.isNull()](#Field#isNull) ⇒ <code>[Field](#Field)</code>
+  * [.isLength(min, [max])](#Field#isLength) ⇒ <code>[Field](#Field)</code>
+  * [.isByteLength(min, [max])](#Field#isByteLength) ⇒ <code>[Field](#Field)</code>
+  * [.isUUID([version])](#Field#isUUID) ⇒ <code>[Field](#Field)</code>
+  * [.isDate()](#Field#isDate) ⇒ <code>[Field](#Field)</code>
+  * [.isAfter([date])](#Field#isAfter) ⇒ <code>[Field](#Field)</code>
+  * [.isBefore([date])](#Field#isBefore) ⇒ <code>[Field](#Field)</code>
+  * [.isIn(values)](#Field#isIn) ⇒ <code>[Field](#Field)</code>
+  * [.isCreditCard()](#Field#isCreditCard) ⇒ <code>[Field](#Field)</code>
+  * [.isISBN([version])](#Field#isISBN) ⇒ <code>[Field](#Field)</code>
+  * [.isMobilePhone(local)](#Field#isMobilePhone) ⇒ <code>[Field](#Field)</code>
+  * [.isJSON()](#Field#isJSON) ⇒ <code>[Field](#Field)</code>
+  * [.isMultibyte()](#Field#isMultibyte) ⇒ <code>[Field](#Field)</code>
+  * [.isAscii()](#Field#isAscii) ⇒ <code>[Field](#Field)</code>
+  * [.isFullWidth()](#Field#isFullWidth) ⇒ <code>[Field](#Field)</code>
+  * [.isHalfWidth()](#Field#isHalfWidth) ⇒ <code>[Field](#Field)</code>
+  * [.isVariableWidth()](#Field#isVariableWidth) ⇒ <code>[Field](#Field)</code>
+  * [.isSurrogatePair()](#Field#isSurrogatePair) ⇒ <code>[Field](#Field)</code>
+  * [.isMongoId()](#Field#isMongoId) ⇒ <code>[Field](#Field)</code>
+  * [.isCurrency([options])](#Field#isCurrency) ⇒ <code>[Field](#Field)</code>
+  * [.toString()](#Field#toString) ⇒ <code>[Field](#Field)</code>
+  * [.toDate()](#Field#toDate) ⇒ <code>[Field](#Field)</code>
+  * [.toFloat()](#Field#toFloat) ⇒ <code>[Field](#Field)</code>
+  * [.toInt()](#Field#toInt) ⇒ <code>[Field](#Field)</code>
+  * [.toBoolean([strict])](#Field#toBoolean) ⇒ <code>[Field](#Field)</code>
+  * [.trim([chars])](#Field#trim) ⇒ <code>[Field](#Field)</code>
+  * [.ltrim([chars])](#Field#ltrim) ⇒ <code>[Field](#Field)</code>
+  * [.rtrim([chars])](#Field#rtrim) ⇒ <code>[Field](#Field)</code>
+  * [.escape()](#Field#escape) ⇒ <code>[Field](#Field)</code>
+  * [.stripLow([keep_new_lines])](#Field#stripLow) ⇒ <code>[Field](#Field)</code>
+  * [.whitelist(chars)](#Field#whitelist) ⇒ <code>[Field](#Field)</code>
+  * [.blacklist(chars)](#Field#blacklist) ⇒ <code>[Field](#Field)</code>
+  * [.normalizeEmail([options])](#Field#normalizeEmail) ⇒ <code>[Field](#Field)</code>
+
+<a name="new_EmailField_new"></a>
+### new EmailField(options)
+Form email field
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| options | <code>Object</code> | Options |
 
 <a name="Form"></a>
 ## Form

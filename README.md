@@ -266,6 +266,11 @@ var myFields = [
 
 ```
 
+### 5. Predefined fields
+
+You can also use pre-defined fields:
+* [EmailField](https://github.com/shaoner/torti/blob/master/lib/README.md#EmailField): EmailField(options) ⇒ Field(options).trim().isEmail().normalizeEmail()
+
 ## API
 
 Documentation is [here](https://github.com/shaoner/torti/blob/master/lib/README.md)

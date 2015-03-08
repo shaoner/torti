@@ -1,5 +1,6 @@
 var Form = require('../index');
 var Field = Form.Field;
+var EmailField = Form.EmailField;
 
 module.exports = {
     Form_empty: function (test) {
@@ -277,4 +278,34 @@ module.exports = {
         test.equals(r.oFields.bar.value, '69');
         test.done();
     },
+    Form_with_EmailField: function (test) {
+        var form = Form({
+            fields: [
+                EmailField({ name: 'foo' }),
+                Field({ name: 'bar' }).isLength(3, 6).contains('orl')
+            ]
+        });
+        var r = form.validate({ foo: 'hello@world.com', 'bar': 'world' });
+        test.equals(r.valid, true);
+        test.equals(typeof r.oFields.foo.error, 'undefined');
+        test.equals(typeof r.oFields.bar.error, 'undefined');
+        test.equals(r.oFields.foo.value, 'hello@world.com');
+        test.equals(r.oFields.bar.value, 'world');
+        test.done();
+    },
+    Form_with_EmailField_2: function (test) {
+        var form = Form({
+            fields: [
+                EmailField({ name: 'foo' }),
+                Field({ name: 'bar' }).isLength(3, 6).contains('orl')
+            ]
+        });
+        var r = form.validate({ foo: 'hello%world.com', 'bar': 'world' });
+        test.equals(r.valid, false);
+        test.equals(r.oFields.foo.error, Form.validators.isEmail);
+        test.equals(typeof r.oFields.bar.error, 'undefined');
+        test.equals(r.oFields.foo.value, 'hello%world.com');
+        test.equals(r.oFields.bar.value, 'world');
+        test.done();
+    }
 };

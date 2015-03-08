@@ -1,5 +1,6 @@
 var Form = require('../index');
 var Field = Form.Field;
+var EmailField = Form.EmailField;
 
 module.exports = {
     Field_empty: function (test) {
@@ -7,7 +8,7 @@ module.exports = {
         test.done();
     },
     Field_empty_in_Form: function (test) {
-        var field = Form({
+        Form({
             fields: [ Field() ]
         });
         test.done();
@@ -20,6 +21,20 @@ module.exports = {
     Field_optional: function (test) {
         var field = Field().optional();
         test.equals(field._required, false);
+        test.done();
+    },
+    EmailField_empty: function (test) {
+        var field = EmailField();
+        test.equals(field._required, true);
+        test.equals(field._stack.length, 3);
+        test.done();
+    },
+    EmailField_with_params: function (test) {
+        var form = Form({
+            fields: [ EmailField({ name: 'email', foo: 'bar' }) ]
+        });
+        var r = form.render();
+        test.equals(r.oFields.email.foo, 'bar');
         test.done();
     }
 };
