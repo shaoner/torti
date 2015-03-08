@@ -108,7 +108,7 @@ router.post('/signup', function (req, res, next) {
     if (renderer.valid !== true) {
         res.render('signup', { form: renderer });
     } else {
-        res.end('Welcome ' + renderer.oFields.username.value);
+        res.end('Welcome ' + renderer.value('username'));
     }
 });
 
@@ -144,7 +144,7 @@ router.post('/signup', function (req, res, next) {
     if (renderer.valid !== true) {
         res.render('signup', { signupForm: renderer });
     } else {
-        res.end('Welcome ' + renderer.oFields.username.value);
+        res.end('Welcome ' + renderer.value('username'));
     }
 });
 ```
@@ -237,6 +237,7 @@ However you can define your own FormRenderer with an additional method to displa
 If you want to define your own FormRenderer, take a look at the FormRenderer class, it should have:
 * a [addField](https://github.com/shaoner/torti/blob/master/lib/README.md#FormRenderer#addField) method to add a field
 * a [setField](https://github.com/shaoner/torti/blob/master/lib/README.md#FormRenderer#setField) method to receive additional field properties (error and value at least)
+* a [value](https://github.com/shaoner/torti/blob/master/lib/README.md#FormRenderer#setField) method to get the field value
 
 Notice that you cannot display a Field or a Form, you always display a FormRenderer.
 

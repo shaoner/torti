@@ -28,5 +28,18 @@ module.exports = {
         test.equals(renderer.oFields.foo.hello, 'world');
         test.equals(renderer.fields[0].hello, 'world');
         test.done();
+    },
+    FormRenderer_value_exists: function (test) {
+        var renderer = this.testForm.render();
+        renderer.addField(Field( { name: 'foo' }));
+        renderer.setField('foo', 'value', 'world');
+        test.equals(renderer.value('foo'), 'world');
+        test.done();
+    },
+    FormRenderer_value_does_not_exist: function (test) {
+        var renderer = this.testForm.render();
+        renderer.addField(Field( { name: 'foo' }));
+        test.equals(renderer.value('foo'), null);
+        test.done();
     }
 };

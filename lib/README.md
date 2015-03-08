@@ -643,6 +643,7 @@ Add a new validator
   * [new FormRenderer([options])](#new_FormRenderer_new)
   * [.addField(field)](#FormRenderer#addField)
   * [.setField(fieldName, key, value)](#FormRenderer#setField)
+  * [.value(fieldName)](#FormRenderer#value) ⇒ <code>string</code>
 
 <a name="new_FormRenderer_new"></a>
 ### new FormRenderer([options])
@@ -668,6 +669,16 @@ Add a new validator
 | fieldName | <code>string</code> | A field name |
 | key | <code>string</code> | The property name to set |
 | value | <code>string</code> | The value to set |
+
+<a name="FormRenderer#value"></a>
+### formRenderer.value(fieldName) ⇒ <code>string</code>
+Retrieve a field value
+
+**Kind**: instance method of <code>[FormRenderer](#FormRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| fieldName | <code>string</code> | A field name |
 
 <a name="validateCallback"></a>
 ## validateCallback ⇒ <code>Boolean</code> \| <code>string</code>
