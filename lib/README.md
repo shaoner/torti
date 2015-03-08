@@ -654,6 +654,8 @@ Add a new validator
 
 <a name="FormRenderer#addField"></a>
 ### formRenderer.addField(field)
+Add a new field
+
 **Kind**: instance method of <code>[FormRenderer](#FormRenderer)</code>  
 
 | Param | Type | Description |
@@ -662,6 +664,8 @@ Add a new validator
 
 <a name="FormRenderer#setField"></a>
 ### formRenderer.setField(fieldName, key, value)
+Set a field property
+
 **Kind**: instance method of <code>[FormRenderer](#FormRenderer)</code>  
 
 | Param | Type | Description |
