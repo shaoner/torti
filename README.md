@@ -234,10 +234,7 @@ This gives us a very simple object, which contains the fields options, the form 
 It has nothing to do with HTML, it is up to the template engine to handle this.
 However you can define your own FormRenderer with an additional method to display the form and the fields as HTML (but I don't recommand it).
 
-If you want to define your own FormRenderer, take a look at the FormRenderer class, it should have:
-* a [addField](https://github.com/shaoner/torti/blob/master/lib/README.md#FormRenderer#addField) method to add a field
-* a [setField](https://github.com/shaoner/torti/blob/master/lib/README.md#FormRenderer#setField) method to receive additional field properties (error and value at least)
-* a [value](https://github.com/shaoner/torti/blob/master/lib/README.md#FormRenderer#setField) method to get the field value
+If you want to define your own FormRenderer, take a look at the [FormRenderer](https://github.com/shaoner/torti/blob/master/lib/README.md#FormRenderer) class.
 
 Notice that you cannot display a Field or a Form, you always display a FormRenderer.
 
