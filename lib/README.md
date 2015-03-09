@@ -645,6 +645,8 @@ Add a new validator
   * [.setField(fieldName, key, value)](#FormRenderer#setField)
   * [.setValue(fieldName, value)](#FormRenderer#setValue)
   * [.value(fieldName)](#FormRenderer#value) ⇒ <code>string</code>
+  * [.addError([fieldName], error)](#FormRenderer#addError)
+  * [.errors([fieldName])](#FormRenderer#errors) ⇒ <code>Array.&lt;string&gt;</code>
 
 <a name="new_FormRenderer_new"></a>
 ### new FormRenderer([options])
@@ -695,6 +697,27 @@ Retrieve a field value
 | Param | Type | Description |
 | --- | --- | --- |
 | fieldName | <code>string</code> | A field name |
+
+<a name="FormRenderer#addError"></a>
+### formRenderer.addError([fieldName], error)
+Set a global error or a field error
+
+**Kind**: instance method of <code>[FormRenderer](#FormRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [fieldName] | <code>string</code> | A field name |
+| error | <code>string</code> | The error |
+
+<a name="FormRenderer#errors"></a>
+### formRenderer.errors([fieldName]) ⇒ <code>Array.&lt;string&gt;</code>
+Retrieve a global error or a field error
+
+**Kind**: instance method of <code>[FormRenderer](#FormRenderer)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [fieldName] | <code>string</code> | A field name |
 
 <a name="validateCallback"></a>
 ## validateCallback ⇒ <code>Boolean</code> \| <code>string</code>

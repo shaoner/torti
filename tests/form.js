@@ -57,8 +57,8 @@ module.exports = {
         });
         var r = form.validate();
         test.equals(r.valid, false);
-        test.equals(r.oFields.foo.error, Form.validators._required);
-        test.equals(r.oFields.bar.error, Form.validators._required);
+        test.equals(r.errors('foo')[0], Form.validators._required);
+        test.equals(r.errors('bar')[0], Form.validators._required);
         test.done();
     },
     Form_validate_body_1: function (test) {
@@ -70,10 +70,10 @@ module.exports = {
         });
         var r = form.validate({ foo: 'hello', 'bar': 'world' });
         test.equals(r.valid, true);
-        test.equals(typeof r.oFields.foo.error, 'undefined');
-        test.equals(typeof r.oFields.foo.error, 'undefined');
-        test.equals(r.oFields.foo.value, 'hello');
-        test.equals(r.oFields.bar.value, 'world');
+        test.equals(r.errors('foo').length, 0);
+        test.equals(r.errors('bar').length, 0);
+        test.equals(r.value('foo'), 'hello');
+        test.equals(r.value('bar'), 'world');
         test.done();
     },
     Form_validate_body_2: function (test) {
@@ -85,10 +85,10 @@ module.exports = {
         });
         var r = form.validate({ foo: 'hello@world.com', 'bar': 'world' });
         test.equals(r.valid, true);
-        test.equals(typeof r.oFields.foo.error, 'undefined');
-        test.equals(typeof r.oFields.bar.error, 'undefined');
-        test.equals(r.oFields.foo.value, 'hello@world.com');
-        test.equals(r.oFields.bar.value, 'world');
+        test.equals(r.errors('foo').length, 0);
+        test.equals(r.errors('bar').length, 0);
+        test.equals(r.value('foo'), 'hello@world.com');
+        test.equals(r.value('bar'), 'world');
         test.done();
     },
     Form_validate_body_3: function (test) {
@@ -100,10 +100,10 @@ module.exports = {
         });
         var r = form.validate({ foo: 'worldx', 'bar': 'world' });
         test.equals(r.valid, false);
-        test.equals(r.oFields.foo.error, Form.validators.equals);
-        test.equals(typeof r.oFields.bar.error, 'undefined');
-        test.equals(r.oFields.foo.value, 'worldx');
-        test.equals(r.oFields.bar.value, 'world');
+        test.equals(r.errors('foo')[0], Form.validators.equals);
+        test.equals(r.errors('bar').length, 0);
+        test.equals(r.value('foo'), 'worldx');
+        test.equals(r.value('bar'), 'world');
         test.done();
     },
     Form_validate_body_4: function (test) {
@@ -115,10 +115,10 @@ module.exports = {
         });
         var r = form.validate({ foo: 'world', 'bar': 'world' });
         test.equals(r.valid, true);
-        test.equals(typeof r.oFields.foo.error, 'undefined');
-        test.equals(typeof r.oFields.bar.error, 'undefined');
-        test.equals(r.oFields.foo.value, 'world');
-        test.equals(r.oFields.bar.value, 'world');
+        test.equals(r.errors('foo').length, 0);
+        test.equals(r.errors('bar').length, 0);
+        test.equals(r.value('foo'), 'world');
+        test.equals(r.value('bar'), 'world');
         test.done();
     },
     Form_validate_body_5: function (test) {
@@ -130,10 +130,10 @@ module.exports = {
         });
         var r = form.validate({ foo: ' world      ', 'bar': 'world' });
         test.equals(r.valid, true);
-        test.equals(typeof r.oFields.foo.error, 'undefined');
-        test.equals(typeof r.oFields.bar.error, 'undefined');
-        test.equals(r.oFields.foo.value, 'world');
-        test.equals(r.oFields.bar.value, 'world');
+        test.equals(r.errors('foo').length, 0);
+        test.equals(r.errors('bar').length, 0);
+        test.equals(r.value('foo'), 'world');
+        test.equals(r.value('bar'), 'world');
         test.done();
     },
     Form_validate_body_with_optional_fields_1: function (test) {
@@ -146,10 +146,10 @@ module.exports = {
         });
         var r = form.validate({ foo: 'hello', 'bar': 'hello' });
         test.equals(r.valid, true);
-        test.equals(typeof r.oFields.foo.error, 'undefined');
-        test.equals(typeof r.oFields.bar.error, 'undefined');
-        test.equals(r.oFields.foo.value, 'hello');
-        test.equals(r.oFields.bar.value, 'hello');
+        test.equals(r.errors('foo').length, 0);
+        test.equals(r.errors('bar').length, 0);
+        test.equals(r.value('foo'), 'hello');
+        test.equals(r.value('bar'), 'hello');
         test.done();
     },
     Form_validate_body_with_optional_fields_2: function (test) {
@@ -162,10 +162,10 @@ module.exports = {
         });
         var r = form.validate({ foo: 'hello', bar: 'hello', boo: 'hello@world.com' });
         test.equals(r.valid, true);
-        test.equals(typeof r.oFields.foo.error, 'undefined');
-        test.equals(typeof r.oFields.bar.error, 'undefined');
-        test.equals(r.oFields.foo.value, 'hello');
-        test.equals(r.oFields.bar.value, 'hello');
+        test.equals(r.errors('foo').length, 0);
+        test.equals(r.errors('bar').length, 0);
+        test.equals(r.value('foo'), 'hello');
+        test.equals(r.value('bar'), 'hello');
         test.done();
     },
     Form_validate_body_with_optional_fields_3: function (test) {
@@ -178,12 +178,12 @@ module.exports = {
         });
         var r = form.validate({ foo: 'hello', bar: 'hello', boo: 'hello' });
         test.equals(r.valid, false);
-        test.equals(typeof r.oFields.foo.error, 'undefined');
-        test.equals(typeof r.oFields.bar.error, 'undefined');
-        test.equals(r.oFields.boo.error, Form.validators.isEmail);
-        test.equals(r.oFields.foo.value, 'hello');
-        test.equals(r.oFields.bar.value, 'hello');
-        test.equals(r.oFields.boo.value, 'hello');
+        test.equals(r.errors('foo').length, 0);
+        test.equals(r.errors('bar').length, 0);
+        test.equals(r.errors('boo')[0], Form.validators.isEmail);
+        test.equals(r.value('foo'), 'hello');
+        test.equals(r.value('bar'), 'hello');
+        test.equals(r.value('boo'), 'hello');
         test.done();
     },
     Form_validate_body_with_unknown_field: function (test) {
@@ -195,11 +195,11 @@ module.exports = {
         });
         var r = form.validate({ foo: 'hello', bar: 'hello', boo: 'hello' });
         test.equals(r.valid, false);
-        test.equals(r.globalError, Form.validators._unknownField);
-        test.equals(typeof r.oFields.foo.error, 'undefined');
-        test.equals(typeof r.oFields.bar.error, 'undefined');
-        test.equals(r.oFields.foo.value, 'hello');
-        test.equals(r.oFields.bar.value, 'hello');
+        test.equals(r.errors()[0], Form.validators._unknownField);
+        test.equals(r.errors('foo').length, 0);
+        test.equals(r.errors('bar').length, 0);
+        test.equals(r.value('foo'), 'hello');
+        test.equals(r.value('bar'), 'hello');
         test.done();
     },
     Form_add_simple_validator: function (test) {
@@ -215,10 +215,10 @@ module.exports = {
         });
         var r = form.validate({ foo: ' 42      ', 'bar': '42' });
         test.equals(r.valid, true);
-        test.equals(typeof r.oFields.foo.error, 'undefined');
-        test.equals(typeof r.oFields.bar.error, 'undefined');
-        test.equals(r.oFields.foo.value, '42');
-        test.equals(r.oFields.bar.value, '42');
+        test.equals(r.errors('foo').length, 0);
+        test.equals(r.errors('bar').length, 0);
+        test.equals(r.value('foo'), '42');
+        test.equals(r.value('bar'), '42');
         test.done();
     },
     Form_add_simple_validator_2: function (test) {
@@ -234,10 +234,10 @@ module.exports = {
         });
         var r = form.validate({ foo: ' 43      ', 'bar': '43' });
         test.equals(r.valid, false);
-        test.equals(typeof r.oFields.foo.error, 'undefined');
-        test.equals(r.oFields.bar.error, Form.validators.is42);
-        test.equals(r.oFields.foo.value, '43');
-        test.equals(r.oFields.bar.value, '43');
+        test.equals(r.errors('foo').length, 0);
+        test.equals(r.errors('bar'), Form.validators.is42);
+        test.equals(r.value('foo'), '43');
+        test.equals(r.value('bar'), '43');
         test.done();
     },
     Form_add_validator_with_params: function (test) {
@@ -253,10 +253,10 @@ module.exports = {
         });
         var r = form.validate({ foo: ' 42      ', 'bar': '42' });
         test.equals(r.valid, true);
-        test.equals(typeof r.oFields.foo.error, 'undefined');
-        test.equals(typeof r.oFields.bar.error, 'undefined');
-        test.equals(r.oFields.foo.value, '42');
-        test.equals(r.oFields.bar.value, '42');
+        test.equals(r.errors('foo').length, 0);
+        test.equals(r.errors('bar').length, 0);
+        test.equals(r.value('foo'), '42');
+        test.equals(r.value('bar'), '42');
         test.done();
     },
     Form_add_validator_with_params_2: function (test) {
@@ -272,10 +272,10 @@ module.exports = {
         });
         var r = form.validate({ foo: ' 69      ', 'bar': '69' });
         test.equals(r.valid, false);
-        test.equals(typeof r.oFields.foo.error, 'undefined');
-        test.equals(r.oFields.bar.error, Form.validators.startsWith);
-        test.equals(r.oFields.foo.value, '69');
-        test.equals(r.oFields.bar.value, '69');
+        test.equals(r.errors('foo').length, 0);
+        test.equals(r.errors('bar'), Form.validators.startsWith);
+        test.equals(r.value('foo'), '69');
+        test.equals(r.value('bar'), '69');
         test.done();
     },
     Form_with_EmailField: function (test) {
@@ -287,10 +287,10 @@ module.exports = {
         });
         var r = form.validate({ foo: 'hello@world.com', 'bar': 'world' });
         test.equals(r.valid, true);
-        test.equals(typeof r.oFields.foo.error, 'undefined');
-        test.equals(typeof r.oFields.bar.error, 'undefined');
-        test.equals(r.oFields.foo.value, 'hello@world.com');
-        test.equals(r.oFields.bar.value, 'world');
+        test.equals(r.errors('foo').length, 0);
+        test.equals(r.errors('bar').length, 0);
+        test.equals(r.value('foo'), 'hello@world.com');
+        test.equals(r.value('bar'), 'world');
         test.done();
     },
     Form_with_EmailField_2: function (test) {
@@ -302,10 +302,10 @@ module.exports = {
         });
         var r = form.validate({ foo: 'hello%world.com', 'bar': 'world' });
         test.equals(r.valid, false);
-        test.equals(r.oFields.foo.error, Form.validators.isEmail);
-        test.equals(typeof r.oFields.bar.error, 'undefined');
-        test.equals(r.oFields.foo.value, 'hello%world.com');
-        test.equals(r.oFields.bar.value, 'world');
+        test.equals(r.errors('foo')[0], Form.validators.isEmail);
+        test.equals(r.errors('bar').length, 0);
+        test.equals(r.value('foo'), 'hello%world.com');
+        test.equals(r.value('bar'), 'world');
         test.done();
     },
     Form_with_array_named_fields: function (test) {
@@ -421,7 +421,7 @@ module.exports = {
         };
         var r = form.validate(body);
         test.equals(r.value('user[login][username]'), 'chucky');
-        test.equals(r.oFields['user[login][email]'].error, Form.validators.isEmail);
+        test.equals(r.errors('user[login][email]')[0], Form.validators.isEmail);
         test.equals(r.value('user[password]'), '123456');
         test.equals(r.value('user[info][name][firstname]'), 'Chuck');
         test.equals(r.value('user[info][name][lastname]'), 'Norris');

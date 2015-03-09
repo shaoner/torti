@@ -47,5 +47,40 @@ module.exports = {
         renderer.setValue('foo', 'bar');
         test.equals(renderer.value('foo'), 'bar');
         test.done();
+    },
+    FormRenderer_add_global_error: function (test) {
+        var renderer = this.testForm.render();
+        renderer.addField(Field( { name: 'foo' }));
+        renderer.addError(Form.validators._unknownField);
+        test.equals(renderer.errors()[0], Form.validators._unknownField);
+        test.done();
+    },
+    FormRenderer_add_multiple_global_errors: function (test) {
+        var renderer = this.testForm.render();
+        renderer.addField(Field( { name: 'foo' }));
+        renderer.addError(Form.validators._unknownField);
+        renderer.addError('myerror');
+        test.equals(renderer.errors()[0], Form.validators._unknownField);
+        test.equals(renderer.errors()[1], 'myerror');
+        test.done();
+    },
+
+    FormRenderer_add_field_error: function (test) {
+        var renderer = this.testForm.render();
+        renderer.addField(Field( { name: 'foo' }));
+        renderer.addError('foo', Form.validators.isEmail);
+        test.equals(renderer.errors('foo')[0], Form.validators.isEmail);
+        test.done();
+    },
+    FormRenderer_add_multiple_field_errors: function (test) {
+        var renderer = this.testForm.render();
+        renderer.addField(Field( { name: 'foo' }));
+        renderer.addError('foo', Form.validators.isEmail);
+        renderer.addError('foo', Form.validators.equals);
+        renderer.addError('foo', Form.validators.contains);
+        test.equals(renderer.errors('foo')[0], Form.validators.isEmail);
+        test.equals(renderer.errors('foo')[1], Form.validators.equals);
+        test.equals(renderer.errors('foo')[2], Form.validators.contains);
+        test.done();
     }
 };
