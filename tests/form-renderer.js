@@ -11,7 +11,6 @@ module.exports = {
     FormRenderer_empty: function (test) {
         var renderer = this.testForm.render();
         test.ok('fields' in renderer);
-        test.ok('oFields' in renderer);
         test.equals(renderer.fields.length, 0);
         test.done();
     },
