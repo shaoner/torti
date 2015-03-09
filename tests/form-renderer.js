@@ -32,7 +32,7 @@ module.exports = {
     FormRenderer_value_exists: function (test) {
         var renderer = this.testForm.render();
         renderer.addField(Field( { name: 'foo' }));
-        renderer.setField('foo', 'value', 'world');
+        renderer.setValue('foo', 'world');
         test.equals(renderer.value('foo'), 'world');
         test.done();
     },
@@ -40,6 +40,13 @@ module.exports = {
         var renderer = this.testForm.render();
         renderer.addField(Field( { name: 'foo' }));
         test.equals(renderer.value('foo'), null);
+        test.done();
+    },
+    FormRenderer_set_value: function (test) {
+        var renderer = this.testForm.render();
+        renderer.addField(Field( { name: 'foo' }));
+        renderer.setValue('foo', 'bar');
+        test.equals(renderer.value('foo'), 'bar');
         test.done();
     }
 };
