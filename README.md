@@ -15,7 +15,7 @@ Here we define a simple form with some fields that contain validators and sanity
 
 ```javascript
 
-var Form = require('torti').Form;
+var Form = require('torti');
 var Field = Form.Field;
 
 var signupForm = Form({
@@ -83,12 +83,12 @@ console.log(signupForm.validate(body));
        { name: 'email', value: 'foo@bar.com' },
        { name: 'password', value: '123456' },
        { name: 'password2', value: '123456' },
-       { name: 'username' }, value: '$$$$$$', error: 'format' ],
+       { name: 'username' }, value: '$$$$$$', errors: [ 'format' ] ],
      oFields: {
        email: { name: 'email', value: 'foo@bar.com' },
        password: { name: 'password', value: '123456' },
        password2: { name: 'password2', value: '123456' },
-       name: { name: 'username', value: '$$$$$$', error: 'format' }
+       name: { name: 'username', value: '$$$$$$', errors: [ 'format' ] }
     },
     valid: false
   }
