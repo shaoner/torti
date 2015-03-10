@@ -1,6 +1,11 @@
 # torti
 Form generator &amp; validator for node using [validator](https://github.com/chriso/validator.js)
 
+[![npm](https://img.shields.io/npm/v/torti.svg?style=flat-square)]()
+[![Travis branch](https://img.shields.io/travis/shaoner/torti/master.svg?style=flat-square)]()
+[![npm](https://img.shields.io/npm/l/torti.svg?style=flat-square)]()
+[![npm](https://img.shields.io/npm/dm/torti.svg?style=flat-square)]()
+
 ## Install
 
 ```
@@ -15,7 +20,7 @@ Here we define a simple form with some fields that contain validators and sanity
 
 ```javascript
 
-var Form = require('torti').Form;
+var Form = require('torti');
 var Field = Form.Field;
 
 var signupForm = Form({
@@ -83,12 +88,12 @@ console.log(signupForm.validate(body));
        { name: 'email', value: 'foo@bar.com' },
        { name: 'password', value: '123456' },
        { name: 'password2', value: '123456' },
-       { name: 'username' }, value: '$$$$$$', error: 'format' ],
+       { name: 'username' }, value: '$$$$$$', errors: [ 'format' ] ],
      oFields: {
        email: { name: 'email', value: 'foo@bar.com' },
        password: { name: 'password', value: '123456' },
        password2: { name: 'password2', value: '123456' },
-       name: { name: 'username', value: '$$$$$$', error: 'format' }
+       name: { name: 'username', value: '$$$$$$', errors: [ 'format' ] }
     },
     valid: false
   }
