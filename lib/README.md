@@ -1,7 +1,7 @@
-# API
-
 ## Modules
 <dl>
+<dt><a href="#module_Errors">Errors</a></dt>
+<dd></dd>
 <dt><a href="#module_FieldValidators">FieldValidators</a></dt>
 <dd></dd>
 </dl>
@@ -13,14 +13,14 @@
 <dd></dd>
 <dt><a href="#Form">Form</a></dt>
 <dd></dd>
-<dt><a href="#FormRenderer">FormRenderer</a></dt>
-<dd></dd>
 </dl>
 ## Typedefs
 <dl>
 <dt><a href="#validateCallback">validateCallback</a> ⇒ <code>Boolean</code> | <code>string</code></dt>
 <dd></dd>
 </dl>
+<a name="module_Errors"></a>
+## Errors
 <a name="module_FieldValidators"></a>
 ## FieldValidators
 <a name="Field"></a>
@@ -29,8 +29,13 @@
 
 * [Field](#Field)
   * [new Field(options)](#new_Field_new)
+  * [.clone()](#Field#clone) ⇒ <code>[Field](#Field)</code>
+  * [.value()](#Field#value)
+  * [.setValue(value)](#Field#setValue)
+  * [.errors()](#Field#errors) ⇒ <code>string</code>
+  * [.addError(error)](#Field#addError)
   * [.optional()](#Field#optional) ⇒ <code>[Field](#Field)</code>
-  * [.validate(value, body)](#Field#validate)
+  * [.validate(body)](#Field#validate)
   * [.equals(comparison)](#Field#equals) ⇒ <code>[Field](#Field)</code>
   * [.contains(seed)](#Field#contains) ⇒ <code>[Field](#Field)</code>
   * [.matches(pattern, [modifier])](#Field#matches) ⇒ <code>[Field](#Field)</code>
@@ -92,22 +97,61 @@ Form field
 | --- | --- | --- |
 | options | <code>Object</code> \| <code>string</code> | Options or fieldname |
 
+<a name="Field#clone"></a>
+### field.clone() ⇒ <code>[Field](#Field)</code>
+Clone the current field
+
+**Kind**: instance method of <code>[Field](#Field)</code>  
+**Returns**: <code>[Field](#Field)</code> - - The new field  
+<a name="Field#value"></a>
+### field.value()
+Retrieve the field value
+
+**Kind**: instance method of <code>[Field](#Field)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+|  | <code>\*</code> | The field value |
+
+<a name="Field#setValue"></a>
+### field.setValue(value)
+Set the field value
+
+**Kind**: instance method of <code>[Field](#Field)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| value | <code>\*</code> | The value |
+
+<a name="Field#errors"></a>
+### field.errors() ⇒ <code>string</code>
+Get the field errors
+
+**Kind**: instance method of <code>[Field](#Field)</code>  
+**Returns**: <code>string</code> - - The field error  
+<a name="Field#addError"></a>
+### field.addError(error)
+Add a field error
+
+**Kind**: instance method of <code>[Field](#Field)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| error | <code>string</code> | The error |
+
 <a name="Field#optional"></a>
 ### field.optional() ⇒ <code>[Field](#Field)</code>
 Set the field as optional
 
 **Kind**: instance method of <code>[Field](#Field)</code>  
-**Access:** public  
 <a name="Field#validate"></a>
-### field.validate(value, body)
+### field.validate(body)
 Validate a field
 
 **Kind**: instance method of <code>[Field](#Field)</code>  
-**Access:** public  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| value | <code>string</code> | The value to validate |
 | body | <code>Object.&lt;string, string&gt;</code> | All form values |
 
 <a name="Field#equals"></a>
@@ -501,8 +545,13 @@ With lowercase set to true, the local part of the email address is lowercased fo
 
 * [EmailField](#EmailField) ⇐ <code>[Field](#Field)</code>
   * [new EmailField(options)](#new_EmailField_new)
+  * [.clone()](#Field#clone) ⇒ <code>[Field](#Field)</code>
+  * [.value()](#Field#value)
+  * [.setValue(value)](#Field#setValue)
+  * [.errors()](#Field#errors) ⇒ <code>string</code>
+  * [.addError(error)](#Field#addError)
   * [.optional()](#Field#optional) ⇒ <code>[Field](#Field)</code>
-  * [.validate(value, body)](#Field#validate)
+  * [.validate(body)](#Field#validate)
   * [.equals(comparison)](#Field#equals) ⇒ <code>[Field](#Field)</code>
   * [.contains(seed)](#Field#contains) ⇒ <code>[Field](#Field)</code>
   * [.matches(pattern, [modifier])](#Field#matches) ⇒ <code>[Field](#Field)</code>
@@ -569,54 +618,156 @@ Form email field
 **Kind**: global class  
 
 * [Form](#Form)
-  * [new Form(options, [Renderer])](#new_Form_new)
+  * [new Form(options)](#new_Form_new)
   * _instance_
+    * [.clone()](#Form#clone) ⇒ <code>[Form](#Form)</code>
+    * [.addField(field)](#Form#addField)
+    * [.setField(fieldName, key, value)](#Form#setField)
+    * [.setValue(fieldName, value)](#Form#setValue)
+    * [.value([fieldName])](#Form#value) ⇒ <code>string</code>
+    * [.addError(fieldName, error)](#Form#addError)
+    * [.errors([fieldName])](#Form#errors) ⇒ <code>Array.&lt;string&gt;</code> \| <code>Object.&lt;string, Array.&lt;string&gt;&gt;</code>
+    * [.addGlobalError(error)](#Form#addGlobalError)
+    * [.globalErrors()](#Form#globalErrors) ⇒ <code>Array.&lt;string&gt;</code>
     * [.get(fieldName)](#Form#get) ⇒ <code>[Field](#Field)</code>
-    * [.validate(body, [stop])](#Form#validate) ⇒ <code>[FormRenderer](#FormRenderer)</code>
-    * [.render()](#Form#render) ⇒ <code>[FormRenderer](#FormRenderer)</code>
+    * [.isValid()](#Form#isValid) ⇒ <code>Boolean</code>
+    * [.validate([...body], [stop])](#Form#validate) ⇒ <code>[Form](#Form)</code>
+    * [.render([refresh])](#Form#render) ⇒ <code>Object.&lt;string, \*&gt;</code>
   * _static_
     * [.validators](#Form.validators) : <code>Object.&lt;string, ?string&gt;</code>
     * [.addValidator(name, fn, error)](#Form.addValidator)
 
 <a name="new_Form_new"></a>
-### new Form(options, [Renderer])
+### new Form(options)
 Form
 
 
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| options | <code>Object</code> |  | Options |
-| [Renderer] | <code>[FormRenderer](#FormRenderer)</code> | <code>FormRenderer</code> | Form renderer class to use |
+| Param | Type | Description |
+| --- | --- | --- |
+| options | <code>Object</code> | Options |
 
+<a name="Form#clone"></a>
+### form.clone() ⇒ <code>[Form](#Form)</code>
+Clone the current form
+
+**Kind**: instance method of <code>[Form](#Form)</code>  
+**Returns**: <code>[Form](#Form)</code> - - the new form  
+<a name="Form#addField"></a>
+### form.addField(field)
+Add a new field
+
+**Kind**: instance method of <code>[Form](#Form)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| field | <code>[Field](#Field)</code> | A field instance |
+
+<a name="Form#setField"></a>
+### form.setField(fieldName, key, value)
+Set a field property
+
+**Kind**: instance method of <code>[Form](#Form)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| fieldName | <code>string</code> | A field name |
+| key | <code>string</code> | The property name to set |
+| value | <code>string</code> | The value to set |
+
+<a name="Form#setValue"></a>
+### form.setValue(fieldName, value)
+Set a field value
+
+**Kind**: instance method of <code>[Form](#Form)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| fieldName | <code>string</code> | A field name |
+| value | <code>string</code> | A value |
+
+<a name="Form#value"></a>
+### form.value([fieldName]) ⇒ <code>string</code>
+Retrieve a field value or each value as a map if fieldName is not provided
+
+**Kind**: instance method of <code>[Form](#Form)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [fieldName] | <code>string</code> | A field name |
+
+<a name="Form#addError"></a>
+### form.addError(fieldName, error)
+Add a field error
+
+**Kind**: instance method of <code>[Form](#Form)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| fieldName | <code>string</code> | A field name |
+| error | <code>string</code> | The error |
+
+<a name="Form#errors"></a>
+### form.errors([fieldName]) ⇒ <code>Array.&lt;string&gt;</code> \| <code>Object.&lt;string, Array.&lt;string&gt;&gt;</code>
+Retrieve a field error or all errors as a map if fieldName is not provided
+
+**Kind**: instance method of <code>[Form](#Form)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [fieldName] | <code>string</code> | A field name |
+
+<a name="Form#addGlobalError"></a>
+### form.addGlobalError(error)
+Add a non field specific error
+
+**Kind**: instance method of <code>[Form](#Form)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| error | <code>string</code> | The global error |
+
+<a name="Form#globalErrors"></a>
+### form.globalErrors() ⇒ <code>Array.&lt;string&gt;</code>
+Get non field specific errors
+
+**Kind**: instance method of <code>[Form](#Form)</code>  
+**Returns**: <code>Array.&lt;string&gt;</code> - - The global errors  
 <a name="Form#get"></a>
 ### form.get(fieldName) ⇒ <code>[Field](#Field)</code>
 Get a field from its name
 
 **Kind**: instance method of <code>[Form](#Form)</code>  
-**Access:** public  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | fieldName | <code>string</code> | The name of the field |
 
-<a name="Form#validate"></a>
-### form.validate(body, [stop]) ⇒ <code>[FormRenderer](#FormRenderer)</code>
-Validate a complete form and returns a form renderer
+<a name="Form#isValid"></a>
+### form.isValid() ⇒ <code>Boolean</code>
+Check if the form is valid
 
 **Kind**: instance method of <code>[Form](#Form)</code>  
-**Access:** public  
+<a name="Form#validate"></a>
+### form.validate([...body], [stop]) ⇒ <code>[Form](#Form)</code>
+Validate a complete form and returns a new populated form
+
+**Kind**: instance method of <code>[Form](#Form)</code>  
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| body | <code>Object.&lt;string, string&gt;</code> |  | Body matching the form |
+| [...body] | <code>Object.&lt;string, \*&gt;</code> | <code>{}</code> | Body matching the form |
 | [stop] | <code>Boolean</code> | <code>false</code> | Stop at first error |
 
 <a name="Form#render"></a>
-### form.render() ⇒ <code>[FormRenderer](#FormRenderer)</code>
-Get the default renderer for the form
+### form.render([refresh]) ⇒ <code>Object.&lt;string, \*&gt;</code>
+Get the associated form object
 
 **Kind**: instance method of <code>[Form](#Form)</code>  
-**Access:** public  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [refresh] | <code>Boolean</code> | <code>false</code> | If true, the form object is rebuilt |
+
 <a name="Form.validators"></a>
 ### Form.validators : <code>Object.&lt;string, ?string&gt;</code>
 List of validators / error messages
@@ -627,97 +778,12 @@ List of validators / error messages
 Add a new validator
 
 **Kind**: static method of <code>[Form](#Form)</code>  
-**Access:** public  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | name | <code>string</code> | Name of the validator |
 | fn | <code>[validateCallback](#validateCallback)</code> | The validator callback |
 | error | <code>string</code> | The error message |
-
-<a name="FormRenderer"></a>
-## FormRenderer
-**Kind**: global class  
-
-* [FormRenderer](#FormRenderer)
-  * [new FormRenderer([options])](#new_FormRenderer_new)
-  * [.addField(field)](#FormRenderer#addField)
-  * [.setField(fieldName, key, value)](#FormRenderer#setField)
-  * [.setValue(fieldName, value)](#FormRenderer#setValue)
-  * [.value(fieldName)](#FormRenderer#value) ⇒ <code>string</code>
-  * [.addError([fieldName], error)](#FormRenderer#addError)
-  * [.errors([fieldName])](#FormRenderer#errors) ⇒ <code>Array.&lt;string&gt;</code>
-
-<a name="new_FormRenderer_new"></a>
-### new FormRenderer([options])
-
-| Param | Type | Description |
-| --- | --- | --- |
-| [options] | <code>Object</code> | Options |
-
-<a name="FormRenderer#addField"></a>
-### formRenderer.addField(field)
-Add a new field
-
-**Kind**: instance method of <code>[FormRenderer](#FormRenderer)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| field | <code>[Field](#Field)</code> | A field instance |
-
-<a name="FormRenderer#setField"></a>
-### formRenderer.setField(fieldName, key, value)
-Set a field property
-
-**Kind**: instance method of <code>[FormRenderer](#FormRenderer)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| fieldName | <code>string</code> | A field name |
-| key | <code>string</code> | The property name to set |
-| value | <code>string</code> | The value to set |
-
-<a name="FormRenderer#setValue"></a>
-### formRenderer.setValue(fieldName, value)
-Set a field value
-
-**Kind**: instance method of <code>[FormRenderer](#FormRenderer)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| fieldName | <code>string</code> | A field name |
-| value | <code>string</code> | A value |
-
-<a name="FormRenderer#value"></a>
-### formRenderer.value(fieldName) ⇒ <code>string</code>
-Retrieve a field value
-
-**Kind**: instance method of <code>[FormRenderer](#FormRenderer)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| fieldName | <code>string</code> | A field name |
-
-<a name="FormRenderer#addError"></a>
-### formRenderer.addError([fieldName], error)
-Set a global error or a field error
-
-**Kind**: instance method of <code>[FormRenderer](#FormRenderer)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| [fieldName] | <code>string</code> | A field name |
-| error | <code>string</code> | The error |
-
-<a name="FormRenderer#errors"></a>
-### formRenderer.errors([fieldName]) ⇒ <code>Array.&lt;string&gt;</code>
-Retrieve a global error or a field error
-
-**Kind**: instance method of <code>[FormRenderer](#FormRenderer)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| [fieldName] | <code>string</code> | A field name |
 
 <a name="validateCallback"></a>
 ## validateCallback ⇒ <code>Boolean</code> \| <code>string</code>

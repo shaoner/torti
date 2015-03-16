@@ -32,18 +32,12 @@ var signupForm = Form({
 
 console.log(signupForm.render());
 /* {
-     method: 'POST', action: '/signup',
+     method: 'POST', action: '/signup', foo: 'bar',
      fields: [
-       { name: 'email' },
-       { name: 'password' },
-       { name: 'password2' },
-       { name: 'username' } ],
-     oFields: {
-       email: { name: 'email' },
-       password: { name: 'password' },
-       password2: { name: 'password2' },
-       name: { name: 'username' }
-    },
+       { name: 'email', value: '', errors: [] },
+       { name: 'password', value: '', errors: [] },
+       { name: 'password2', value: '', errors: [] },
+       { name: 'username', value: '', errors: [] } ],
     valid: true
   }
 */
@@ -55,41 +49,31 @@ var body = {
     username: 'Chuck_Norris'
 };
 
-console.log(signupForm.validate(body));
+var vForm = signupForm.validate(body);
+console.log(vForm.render());
 /*
  {
      method: 'POST', action: '/signup',
      fields: [
-       { name: 'email', value: 'foo@bar.com' },
-       { name: 'password', value: '123456' },
-       { name: 'password2', value: '123456' },
-       { name: 'username' }, value: 'Chuck_Norris' ],
-     oFields: {
-       email: { name: 'email', value: 'foo@bar.com' },
-       password: { name: 'password', value: '123456' },
-       password2: { name: 'password2', value: '123456' },
-       name: { name: 'username', value: 'Chuck_Norris' }
-    },
+       { name: 'email', value: 'foo@bar.com', errors: [] },
+       { name: 'password', value: '123456', errors: [] },
+       { name: 'password2', value: '123456', errors: [] },
+       { name: 'username' }, value: 'Chuck_Norris', errors: [] ],
     valid: true
   }
 */
 
 body.username = '$$$$$$';
-console.log(signupForm.validate(body));
+var vForm = vForm.validate(body)
+console.log(vForm.render());
 /*
  {
      method: 'POST', action: '/signup',
      fields: [
-       { name: 'email', value: 'foo@bar.com' },
-       { name: 'password', value: '123456' },
-       { name: 'password2', value: '123456' },
+       { name: 'email', value: 'foo@bar.com', errors: [] },
+       { name: 'password', value: '123456', errors: [] },
+       { name: 'password2', value: '123456', errors: [] },
        { name: 'username' }, value: '$$$$$$', errors: [ 'format' ] ],
-     oFields: {
-       email: { name: 'email', value: 'foo@bar.com' },
-       password: { name: 'password', value: '123456' },
-       password2: { name: 'password2', value: '123456' },
-       name: { name: 'username', value: '$$$$$$', errors: [ 'format' ] }
-    },
     valid: false
   }
 */
@@ -104,11 +88,11 @@ router.get('/signup', function (req, res, next) {
 });
 
 router.post('/signup', function (req, res, next) {
-    var renderer = signupForm.validate(req.body);
-    if (renderer.valid !== true) {
-        res.render('signup', { form: renderer });
+    var vForm = signupForm.validate(req.body);
+    if (vForm.isValid() !== true) {
+        res.render('signup', { form: vForm.render() });
     } else {
-        res.end('Welcome ' + renderer.value('username'));
+        res.end('Welcome ' + vForm.value('username'));
     }
 });
 
@@ -136,15 +120,15 @@ var signupForm = Form({
 
 // 2. Use it in your controller
 router.get('/signup', function (req, res, next) {
-    res.render('signup', { signupForm: signupForm.render() });
+    res.render('signup', { form: signupForm.render() });
 });
 
 router.post('/signup', function (req, res, next) {
-    var renderer = signupForm.validate(req.body);
-    if (renderer.valid !== true) {
-        res.render('signup', { signupForm: renderer });
+    var vForm = signupForm.validate(req.body);
+    if (vForm.isValid() !== true) {
+        res.render('signup', { form: vForm.render() });
     } else {
-        res.end('Welcome ' + renderer.value('username'));
+        res.end('Welcome ' + vForm.value('username'));
     }
 });
 ```
@@ -156,6 +140,9 @@ router.post('/signup', function (req, res, next) {
         {>"partials/form/csrf"/}
         {#fields}
             {>"partials/form/{partial}"/}
+            {#errors}
+            <div>{.}</div>
+            {/errors}
         {/fields}
         <div>
             <input type="submit" value="{submit}">
@@ -196,8 +183,8 @@ It is basically a way to delay the evaluation of the field value since it has no
 var myForm = Form({ hello: 'world', fields: myFields });
 ```
 
-* The *fields* property should be an array of Field
-* You can also put whatever property you want in the form options
+* The *fields* property should be an array of [Field](https://github.com/shaoner/torti/blob/master/lib/README.md#Field)
+* You can also put whatever property you want in the form options. For example, I choose to set a *method* and an *action* property, but these are completely independant from the API.
 
 When you want to validate your data, pass it to the form:
 
@@ -207,38 +194,29 @@ var data = {
    password: '123456',
    password2: '123456',   
 };
-var renderer = myForm.validate(data);
-console.log(renderer.valid); // true
-console.log(renderer);
+var vForm = myForm.validate(data);
+console.log(vForm.isValid());
+/*
+true
+*/
+console.log(vForm.render());
 /*
 {
     hello: 'world',
     fields: [
-        { name: 'email', value: 'foo@bar.com' },
-        { name: 'password', foo: 'bar', value: '123456' },
-        { name: 'password2', value: '123456' },
-    oFields: {
-        email: { name: 'email', value: 'foo@bar.com' },
-        password: { name: 'password', value: '123456' },
-        password2: { name: 'password2', value: '123456' },
-    },
+        { name: 'email', value: 'foo@bar.com', errors: [] },
+        { name: 'password', foo: 'bar', value: '123456', errors: [] },
+        { name: 'password2', value: '123456', errors: [] },
     valid: true
 }
 */
+console.log(vForm.value('email'));
+/*
+foo@bar.com
+*/
 ```
 
-### 3. [FormRenderer](https://github.com/shaoner/torti/blob/master/lib/README.md#FormRenderer)
-
-The FormRenderer is a class which will contain errors and values since we don't want to contaminate the Field and the Form instances which may be reused.
-This gives us a very simple object, which contains the fields options, the form options and a Boolean indicating whether the Form is valid or not.
-It has nothing to do with HTML, it is up to the template engine to handle this.
-However you can define your own FormRenderer with an additional method to display the form and the fields as HTML (but I don't recommand it).
-
-If you want to define your own FormRenderer, take a look at the [FormRenderer](https://github.com/shaoner/torti/blob/master/lib/README.md#FormRenderer) class.
-
-Notice that you cannot display a Field or a Form, you always display a FormRenderer.
-
-### 4. [FieldValidators](https://github.com/shaoner/torti/blob/master/lib/README.md#module_FieldValidators)
+### 3. [FieldValidators](https://github.com/shaoner/torti/blob/master/lib/README.md#module_FieldValidators)
 
 FieldValidators is a simple object with a string key matching a [validator](https://github.com/chriso/validator.js) function and a string value which is an error.
 For now, this object is global and cannot be defined for each Form.
@@ -264,7 +242,7 @@ var myFields = [
 
 ```
 
-### 5. Predefined fields
+### 4. Predefined fields
 
 You can also use pre-defined fields:
 * [EmailField](https://github.com/shaoner/torti/blob/master/lib/README.md#EmailField): EmailField(options) ⇒ Field(options).trim().isEmail().normalizeEmail()

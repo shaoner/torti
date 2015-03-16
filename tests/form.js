@@ -1,6 +1,7 @@
 var Form = require('../index');
 var Field = Form.Field;
 var EmailField = Form.EmailField;
+var Errors = Form.Errors;
 
 module.exports = {
     Form_empty: function (test) {
@@ -56,9 +57,9 @@ module.exports = {
             ]
         });
         var r = form.validate();
-        test.equals(r.valid, false);
-        test.equals(r.errors('foo')[0], Form.validators._required);
-        test.equals(r.errors('bar')[0], Form.validators._required);
+        test.equals(r.isValid(), false);
+        test.equals(r.errors('foo')[0], Errors._required);
+        test.equals(r.errors('bar')[0], Errors._required);
         test.done();
     },
     Form_validate_body_1: function (test) {
@@ -69,7 +70,7 @@ module.exports = {
             ]
         });
         var r = form.validate({ foo: 'hello', 'bar': 'world' });
-        test.equals(r.valid, true);
+        test.equals(r.isValid(), true);
         test.equals(r.errors('foo').length, 0);
         test.equals(r.errors('bar').length, 0);
         test.equals(r.value('foo'), 'hello');
@@ -84,7 +85,7 @@ module.exports = {
             ]
         });
         var r = form.validate({ foo: 'hello@world.com', 'bar': 'world' });
-        test.equals(r.valid, true);
+        test.equals(r.isValid(), true);
         test.equals(r.errors('foo').length, 0);
         test.equals(r.errors('bar').length, 0);
         test.equals(r.value('foo'), 'hello@world.com');
@@ -99,8 +100,8 @@ module.exports = {
             ]
         });
         var r = form.validate({ foo: 'worldx', 'bar': 'world' });
-        test.equals(r.valid, false);
-        test.equals(r.errors('foo')[0], Form.validators.equals);
+        test.equals(r.isValid(), false);
+        test.equals(r.errors('foo')[0], Errors.equals);
         test.equals(r.errors('bar').length, 0);
         test.equals(r.value('foo'), 'worldx');
         test.equals(r.value('bar'), 'world');
@@ -114,7 +115,7 @@ module.exports = {
             ]
         });
         var r = form.validate({ foo: 'world', 'bar': 'world' });
-        test.equals(r.valid, true);
+        test.equals(r.isValid(), true);
         test.equals(r.errors('foo').length, 0);
         test.equals(r.errors('bar').length, 0);
         test.equals(r.value('foo'), 'world');
@@ -129,7 +130,7 @@ module.exports = {
             ]
         });
         var r = form.validate({ foo: ' world      ', 'bar': 'world' });
-        test.equals(r.valid, true);
+        test.equals(r.isValid(), true);
         test.equals(r.errors('foo').length, 0);
         test.equals(r.errors('bar').length, 0);
         test.equals(r.value('foo'), 'world');
@@ -145,7 +146,7 @@ module.exports = {
             ]
         });
         var r = form.validate({ foo: 'hello', 'bar': 'hello' });
-        test.equals(r.valid, true);
+        test.equals(r.isValid(), true);
         test.equals(r.errors('foo').length, 0);
         test.equals(r.errors('bar').length, 0);
         test.equals(r.value('foo'), 'hello');
@@ -161,7 +162,7 @@ module.exports = {
             ]
         });
         var r = form.validate({ foo: 'hello', bar: 'hello', boo: 'hello@world.com' });
-        test.equals(r.valid, true);
+        test.equals(r.isValid(), true);
         test.equals(r.errors('foo').length, 0);
         test.equals(r.errors('bar').length, 0);
         test.equals(r.value('foo'), 'hello');
@@ -177,10 +178,10 @@ module.exports = {
             ]
         });
         var r = form.validate({ foo: 'hello', bar: 'hello', boo: 'hello' });
-        test.equals(r.valid, false);
+        test.equals(r.isValid(), false);
         test.equals(r.errors('foo').length, 0);
         test.equals(r.errors('bar').length, 0);
-        test.equals(r.errors('boo')[0], Form.validators.isEmail);
+        test.equals(r.errors('boo')[0], Errors.isEmail);
         test.equals(r.value('foo'), 'hello');
         test.equals(r.value('bar'), 'hello');
         test.equals(r.value('boo'), 'hello');
@@ -194,8 +195,8 @@ module.exports = {
             ]
         });
         var r = form.validate({ foo: 'hello', bar: 'hello', boo: 'hello' });
-        test.equals(r.valid, false);
-        test.equals(r.errors()[0], Form.validators._unknownField);
+        test.equals(r.isValid(), false);
+        test.equals(r.globalErrors()[0], Errors._unknownField);
         test.equals(r.errors('foo').length, 0);
         test.equals(r.errors('bar').length, 0);
         test.equals(r.value('foo'), 'hello');
@@ -214,7 +215,7 @@ module.exports = {
             ]
         });
         var r = form.validate({ foo: ' 42      ', 'bar': '42' });
-        test.equals(r.valid, true);
+        test.equals(r.isValid(), true);
         test.equals(r.errors('foo').length, 0);
         test.equals(r.errors('bar').length, 0);
         test.equals(r.value('foo'), '42');
@@ -233,9 +234,9 @@ module.exports = {
             ]
         });
         var r = form.validate({ foo: ' 43      ', 'bar': '43' });
-        test.equals(r.valid, false);
+        test.equals(r.isValid(), false);
         test.equals(r.errors('foo').length, 0);
-        test.equals(r.errors('bar'), Form.validators.is42);
+        test.equals(r.errors('bar'), Errors.is42);
         test.equals(r.value('foo'), '43');
         test.equals(r.value('bar'), '43');
         test.done();
@@ -252,7 +253,7 @@ module.exports = {
             ]
         });
         var r = form.validate({ foo: ' 42      ', 'bar': '42' });
-        test.equals(r.valid, true);
+        test.equals(r.isValid(), true);
         test.equals(r.errors('foo').length, 0);
         test.equals(r.errors('bar').length, 0);
         test.equals(r.value('foo'), '42');
@@ -271,9 +272,9 @@ module.exports = {
             ]
         });
         var r = form.validate({ foo: ' 69      ', 'bar': '69' });
-        test.equals(r.valid, false);
+        test.equals(r.isValid(), false);
         test.equals(r.errors('foo').length, 0);
-        test.equals(r.errors('bar'), Form.validators.startsWith);
+        test.equals(r.errors('bar'), Errors.startsWith);
         test.equals(r.value('foo'), '69');
         test.equals(r.value('bar'), '69');
         test.done();
@@ -286,7 +287,7 @@ module.exports = {
             ]
         });
         var r = form.validate({ foo: 'hello@world.com', 'bar': 'world' });
-        test.equals(r.valid, true);
+        test.equals(r.isValid(), true);
         test.equals(r.errors('foo').length, 0);
         test.equals(r.errors('bar').length, 0);
         test.equals(r.value('foo'), 'hello@world.com');
@@ -301,8 +302,8 @@ module.exports = {
             ]
         });
         var r = form.validate({ foo: 'hello%world.com', 'bar': 'world' });
-        test.equals(r.valid, false);
-        test.equals(r.errors('foo')[0], Form.validators.isEmail);
+        test.equals(r.isValid(), false);
+        test.equals(r.errors('foo')[0], Errors.isEmail);
         test.equals(r.errors('bar').length, 0);
         test.equals(r.value('foo'), 'hello%world.com');
         test.equals(r.value('bar'), 'world');

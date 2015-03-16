@@ -34,7 +34,7 @@ module.exports = {
             fields: [ EmailField({ name: 'email', foo: 'bar' }) ]
         });
         var r = form.render();
-        test.equals(r.oFields.email.foo, 'bar');
+        test.equals(r.fields[0].foo, 'bar');
         test.done();
     }
 };
