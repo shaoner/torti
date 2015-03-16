@@ -308,5 +308,32 @@ module.exports = {
         test.equals(r.value('foo'), 'hello%world.com');
         test.equals(r.value('bar'), 'world');
         test.done();
+    },
+    Form_clone: function (test) {
+        var form = Form({
+            hello: 'world',
+            fields: [
+                EmailField({ name: 'foo' }),
+                Field({ name: 'bar' }).isLength(3, 6).contains('orl')
+            ]
+        });
+        var clone = form.clone();
+        test.equals(form._fields.length, clone._fields.length);
+        test.equals(clone._options.hello, 'world');
+        test.done();
+    },
+    Form_render_with_refresh: function (test) {
+        var form = Form({
+            hello: 'world',
+            fields: [
+                EmailField({ name: 'foo' }),
+                Field({ name: 'bar' }).isLength(3, 6).contains('orl')
+            ]
+        });
+        form.addField(Field({ name: 'baz' }));
+        test.equals(form.render().fields.length, 2);
+        form.refresh();
+        test.equals(form.render().fields.length, 3);
+        test.done();
     }
 };
