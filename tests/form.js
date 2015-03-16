@@ -335,5 +335,17 @@ module.exports = {
         form.refresh();
         test.equals(form.render().fields.length, 3);
         test.done();
+    },
+    Form_render_with_global_errors: function (test) {
+        var form = Form({
+            fields: [
+                EmailField({ name: 'foo' }),
+                Field({ name: 'bar' }).isLength(3, 6).contains('orl')
+            ]
+        });
+        form.addGlobalError('Oh no!');
+        form.refresh();
+        test.equals(form.render().errors[0], 'Oh no!');
+        test.done();
     }
 };
