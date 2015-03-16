@@ -1,10 +1,3 @@
-## Modules
-<dl>
-<dt><a href="#module_Errors">Errors</a></dt>
-<dd></dd>
-<dt><a href="#module_FieldValidators">FieldValidators</a></dt>
-<dd></dd>
-</dl>
 ## Classes
 <dl>
 <dt><a href="#Field">Field</a></dt>
@@ -14,15 +7,18 @@
 <dt><a href="#Form">Form</a></dt>
 <dd></dd>
 </dl>
+## Members
+<dl>
+<dt><a href="#Errors">Errors</a> : <code>string</code></dt>
+<dd></dd>
+<dt><a href="#FieldValidators">FieldValidators</a> : <code><a href="#validateCallback">validateCallback</a></code></dt>
+<dd></dd>
+</dl>
 ## Typedefs
 <dl>
 <dt><a href="#validateCallback">validateCallback</a> ⇒ <code>Boolean</code> | <code>string</code></dt>
 <dd></dd>
 </dl>
-<a name="module_Errors"></a>
-## Errors
-<a name="module_FieldValidators"></a>
-## FieldValidators
 <a name="Field"></a>
 ## Field
 **Kind**: global class  
@@ -785,6 +781,12 @@ Add a new validator
 | fn | <code>[validateCallback](#validateCallback)</code> | The validator callback |
 | error | <code>string</code> | The error message |
 
+<a name="Errors"></a>
+## Errors : <code>string</code>
+**Kind**: global enum  
+<a name="FieldValidators"></a>
+## FieldValidators : <code>[validateCallback](#validateCallback)</code>
+**Kind**: global enum  
 <a name="validateCallback"></a>
 ## validateCallback ⇒ <code>Boolean</code> \| <code>string</code>
 **Kind**: global typedef  
