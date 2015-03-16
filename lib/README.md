@@ -87,6 +87,8 @@
   * [.normalizeEmail([options])](#Field#normalizeEmail) ⇒ <code>[Field](#Field)</code>
   * [.capitalize()](#Field#capitalize) ⇒ <code>[Field](#Field)</code>
   * [.trunc([options])](#Field#trunc) ⇒ <code>[Field](#Field)</code>
+  * [.lower()](#Field#lower) ⇒ <code>[Field](#Field)</code>
+  * [.upper()](#Field#upper) ⇒ <code>[Field](#Field)</code>
 
 <a name="new_Field_new"></a>
 ### new Field(options)
@@ -556,6 +558,16 @@ Truncate the field value
 | [options.omission] | <code>string</code> | <code>&quot;&#x27;...&#x27;&quot;</code> | The string to indicate text is omitted |
 | [options.separator] | <code>RegExp</code> \| <code>string</code> |  | The separator pattern to truncate to |
 
+<a name="Field#lower"></a>
+### field.lower() ⇒ <code>[Field](#Field)</code>
+Convert the field value to lowercase
+
+**Kind**: instance method of <code>[Field](#Field)</code>  
+<a name="Field#upper"></a>
+### field.upper() ⇒ <code>[Field](#Field)</code>
+Convert the field value to uppercase
+
+**Kind**: instance method of <code>[Field](#Field)</code>  
 <a name="EmailField"></a>
 ## EmailField ⇐ <code>[Field](#Field)</code>
 **Extends:** <code>[Field](#Field)</code>  
@@ -623,6 +635,8 @@ Truncate the field value
   * [.normalizeEmail([options])](#Field#normalizeEmail) ⇒ <code>[Field](#Field)</code>
   * [.capitalize()](#Field#capitalize) ⇒ <code>[Field](#Field)</code>
   * [.trunc([options])](#Field#trunc) ⇒ <code>[Field](#Field)</code>
+  * [.lower()](#Field#lower) ⇒ <code>[Field](#Field)</code>
+  * [.upper()](#Field#upper) ⇒ <code>[Field](#Field)</code>
 
 <a name="new_EmailField_new"></a>
 ### new EmailField(options)

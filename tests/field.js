@@ -92,5 +92,19 @@ module.exports = {
         test.equals(f.value().length, 10);
         test.equals(f.value(), 'Hello t...');
         test.done();
+    },
+    Field_lower: function (test) {
+        var f = Field({ name: 'foo' }).lower();
+        f.setValue('BaR');
+        f.validate();
+        test.equals(f.value(), 'bar');
+        test.done();
+    },
+    Field_upper: function (test) {
+        var f = Field({ name: 'foo' }).upper();
+        f.setValue('bAr');
+        f.validate();
+        test.equals(f.value(), 'BAR');
+        test.done();
     }
 };
