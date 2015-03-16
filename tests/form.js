@@ -352,9 +352,8 @@ module.exports = {
                 Field({ name: 'bar' }).isLength(3, 6).contains('orl')
             ]
         });
-        form.addField(Field({ name: 'baz' }));
         test.equals(form.render().fields.length, 2);
-        form.refresh();
+        form.addField(Field({ name: 'baz' }));
         test.equals(form.render().fields.length, 3);
         test.done();
     },
