@@ -84,5 +84,13 @@ module.exports = {
         f.validate();
         test.equals(f.value(), 'Bar');
         test.done();
+    },
+    Field_truncate: function (test) {
+        var f = Field({ name: 'foo' }).trunc(10);
+        f.setValue('Hello the world !');
+        f.validate();
+        test.equals(f.value().length, 10);
+        test.equals(f.value(), 'Hello t...');
+        test.done();
     }
 };
