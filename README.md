@@ -158,7 +158,7 @@ router.post('/signup', function (req, res, next) {
 ```
 ## Getting started
 
-### 1. [Field](https://github.com/shaoner/torti/blob/master/lib/README.md#Field)
+### 1. [Field](lib/README.md#Field)
 
 Define your fields, with your own rules
 
@@ -172,18 +172,18 @@ var myFields = [
 
 * The *name* property is necessary to be able to retrieve your field
 * You can add your own properties in the options as shown in the Field password
-* By default, each field is required. If you want to make it optional, add the [optional](https://github.com/shaoner/torti/blob/master/lib/README.md#Field#optional) validator
+* By default, each field is required. If you want to make it optional, add the [optional](lib/README.md#Field#optional) validator
 
 It can also be used as Field('fieldname'), which returns a special function.
 It is basically a way to delay the evaluation of the field value since it has none for now.
 
-### 2. [Form](https://github.com/shaoner/torti/blob/master/lib/README.md#Field)
+### 2. [Form](lib/README.md#Field)
 
 ```javascript
 var myForm = Form({ hello: 'world', fields: myFields });
 ```
 
-* The *fields* property should be an array of [Field](https://github.com/shaoner/torti/blob/master/lib/README.md#Field)
+* The *fields* property should be an array of [Field](lib/README.md#Field)
 * You can also put whatever property you want in the form options. For example, I choose to set a *method* and an *action* property, but these are completely independant from the API.
 
 When you want to validate your data, pass it to the form:
@@ -216,7 +216,7 @@ foo@bar.com
 */
 ```
 
-### 3. [FieldValidators](https://github.com/shaoner/torti/blob/master/lib/README.md#module_FieldValidators)
+### 3. [FieldValidators](lib/README.md#module_FieldValidators)
 
 FieldValidators is a simple object with a string key matching a [validator](https://github.com/chriso/validator.js) function and a string value which is an error.
 For now, this object is global and cannot be defined for each Form.
@@ -245,11 +245,11 @@ var myFields = [
 ### 4. Predefined fields
 
 You can also use pre-defined fields:
-* [EmailField](https://github.com/shaoner/torti/blob/master/lib/README.md#EmailField): EmailField(options) ⇒ Field(options).trim().isEmail().normalizeEmail()
+* [EmailField](lib/README.md#EmailField): EmailField(options) ⇒ Field(options).trim().isEmail().normalizeEmail()
 
 ## API
 
-Documentation is [here](https://github.com/shaoner/torti/blob/master/lib/README.md)
+Documentation is [here](lib/README.md)
 
 ## Contributing
 
