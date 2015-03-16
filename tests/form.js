@@ -322,6 +322,28 @@ module.exports = {
         test.equals(clone._options.hello, 'world');
         test.done();
     },
+    Form_clone_global_error: function (test) {
+        var form = Form();
+        var clone = form.clone();
+        clone.addGlobalError('hello');
+        test.equals(form._errors.length, 0);
+        test.equals(clone._errors.length, 1);
+        test.equals(clone._errors[0], 'hello');
+        test.done();
+    },
+    Form_clone_with_values: function (test) {
+        var form = Form({
+            fields: [
+                Field({ name: 'foo', value: 'foz' }),
+                Field({ name: 'bar', value: 'baz' })
+            ]
+        });
+        var clone = form.clone();
+        form.setValue('foo', 'changed');
+        test.equals(clone.value('foo'), 'foz');
+        test.equals(form.value('foo'), 'changed');
+        test.done();
+    },
     Form_render_with_refresh: function (test) {
         var form = Form({
             hello: 'world',
