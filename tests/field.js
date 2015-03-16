@@ -77,6 +77,12 @@ module.exports = {
         test.equals(f.errors().length, 1);
         test.equals(clone.errors().length, 0);
         test.done();
+    },
+    Field_capitalize: function (test) {
+        var f = Field({ name: 'foo' }).trim().capitalize();
+        f.setValue('  bar ');
+        f.validate();
+        test.equals(f.value(), 'Bar');
+        test.done();
     }
-
 };

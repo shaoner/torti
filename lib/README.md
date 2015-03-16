@@ -85,6 +85,7 @@
   * [.whitelist(chars)](#Field#whitelist) ⇒ <code>[Field](#Field)</code>
   * [.blacklist(chars)](#Field#blacklist) ⇒ <code>[Field](#Field)</code>
   * [.normalizeEmail([options])](#Field#normalizeEmail) ⇒ <code>[Field](#Field)</code>
+  * [.capitalize()](#Field#capitalize) ⇒ <code>[Field](#Field)</code>
 
 <a name="new_Field_new"></a>
 ### new Field(options)
@@ -536,6 +537,11 @@ With lowercase set to true, the local part of the email address is lowercased fo
 | --- | --- | --- | --- |
 | [options] | <code>Object</code> | <code>{ lowercase: true }</code> | Options |
 
+<a name="Field#capitalize"></a>
+### field.capitalize() ⇒ <code>[Field](#Field)</code>
+Capitalize the field value
+
+**Kind**: instance method of <code>[Field](#Field)</code>  
 <a name="EmailField"></a>
 ## EmailField ⇐ <code>[Field](#Field)</code>
 **Extends:** <code>[Field](#Field)</code>  
@@ -601,6 +607,7 @@ With lowercase set to true, the local part of the email address is lowercased fo
   * [.whitelist(chars)](#Field#whitelist) ⇒ <code>[Field](#Field)</code>
   * [.blacklist(chars)](#Field#blacklist) ⇒ <code>[Field](#Field)</code>
   * [.normalizeEmail([options])](#Field#normalizeEmail) ⇒ <code>[Field](#Field)</code>
+  * [.capitalize()](#Field#capitalize) ⇒ <code>[Field](#Field)</code>
 
 <a name="new_EmailField_new"></a>
 ### new EmailField(options)
