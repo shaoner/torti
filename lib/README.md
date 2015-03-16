@@ -1,3 +1,5 @@
+# API
+
 ## Classes
 <dl>
 <dt><a href="#Field">Field</a></dt>
@@ -625,6 +627,7 @@ Form email field
     * [.errors([fieldName])](#Form#errors) ⇒ <code>Array.&lt;string&gt;</code> \| <code>Object.&lt;string, Array.&lt;string&gt;&gt;</code>
     * [.addGlobalError(error)](#Form#addGlobalError)
     * [.globalErrors()](#Form#globalErrors) ⇒ <code>Array.&lt;string&gt;</code>
+    * [.refresh()](#Form#refresh)
     * [.get(fieldName)](#Form#get) ⇒ <code>[Field](#Field)</code>
     * [.isValid()](#Form#isValid) ⇒ <code>Boolean</code>
     * [.validate([...body], [stop])](#Form#validate) ⇒ <code>[Form](#Form)</code>
@@ -728,6 +731,11 @@ Get non field specific errors
 
 **Kind**: instance method of <code>[Form](#Form)</code>  
 **Returns**: <code>Array.&lt;string&gt;</code> - - The global errors  
+<a name="Form#refresh"></a>
+### form.refresh()
+Reset the render object
+
+**Kind**: instance method of <code>[Form](#Form)</code>  
 <a name="Form#get"></a>
 ### form.get(fieldName) ⇒ <code>[Field](#Field)</code>
 Get a field from its name
