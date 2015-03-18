@@ -87,15 +87,17 @@ module.exports = {
     Field_capitalize: function (test) {
         var f = Field({ name: 'foo' }).trim().capitalize();
         f.setValue('  bar ');
-        f.validate(function () {
-            test.equals(f.value(), 'Bar');
+        f.validate(function (valid) {
+            test.equals(valid, true);
+            test.equals(this.value(), 'Bar');
             test.done();
         });
     },
     Field_truncate: function (test) {
         var f = Field({ name: 'foo' }).trunc(10);
         f.setValue('Hello the world !');
-        f.validate(function () {
+        f.validate(function (valid) {
+            test.equals(valid, true);
             test.equals(this.value().length, 10);
             test.equals(this.value(), 'Hello t...');
             test.done();
@@ -104,7 +106,8 @@ module.exports = {
     Field_lower: function (test) {
         var f = Field({ name: 'foo' }).lower();
         f.setValue('BaR');
-        f.validate(function () {
+        f.validate(function (valid) {
+            test.equals(valid, true);
             test.equals(this.value(), 'bar');
             test.done();
         });
@@ -112,7 +115,8 @@ module.exports = {
     Field_upper: function (test) {
         var f = Field({ name: 'foo' }).upper();
         f.setValue('bAr');
-        f.validate(function () {
+        f.validate(function (valid) {
+            test.equals(valid, true);
             test.equals(this.value(), 'BAR');
             test.done();
         });

@@ -56,10 +56,10 @@ module.exports = {
                 Field({ name: 'bar' })
             ]
         });
-        form.validate(function(r) {
-            test.equals(r.isValid(), false);
-            test.equals(r.errors('foo')[0], Errors._required);
-            test.equals(r.errors('bar')[0], Errors._required);
+        form.validate(function (vForm) {
+            test.equals(vForm.isValid(), false);
+            test.equals(vForm.errors('foo')[0], Errors._required);
+            test.equals(vForm.errors('bar')[0], Errors._required);
             test.done();
         });
     },
@@ -70,12 +70,12 @@ module.exports = {
                 Field({ name: 'bar' })
             ]
         });
-        form.validate({ foo: 'hello', 'bar': 'world' }, function (r) {
-            test.equals(r.isValid(), true);
-            test.equals(r.errors('foo').length, 0);
-            test.equals(r.errors('bar').length, 0);
-            test.equals(r.value('foo'), 'hello');
-            test.equals(r.value('bar'), 'world');
+        form.validate({ foo: 'hello', 'bar': 'world' }, function (vForm) {
+            test.equals(vForm.isValid(), true);
+            test.equals(vForm.errors('foo').length, 0);
+            test.equals(vForm.errors('bar').length, 0);
+            test.equals(vForm.value('foo'), 'hello');
+            test.equals(vForm.value('bar'), 'world');
             test.done();
         });
     },
@@ -86,12 +86,12 @@ module.exports = {
                 Field({ name: 'bar' }).isLength(3, 6).contains('orl')
             ]
         });
-        form.validate({ foo: 'hello@world.com', 'bar': 'world' }, function (r) {
-            test.equals(r.isValid(), true);
-            test.equals(r.errors('foo').length, 0);
-            test.equals(r.errors('bar').length, 0);
-            test.equals(r.value('foo'), 'hello@world.com');
-            test.equals(r.value('bar'), 'world');
+        form.validate({ foo: 'hello@world.com', 'bar': 'world' }, function (vForm) {
+            test.equals(vForm.isValid(), true);
+            test.equals(vForm.errors('foo').length, 0);
+            test.equals(vForm.errors('bar').length, 0);
+            test.equals(vForm.value('foo'), 'hello@world.com');
+            test.equals(vForm.value('bar'), 'world');
             test.done();
         });
     },
@@ -102,12 +102,12 @@ module.exports = {
                 Field({ name: 'bar' }).isLength(3, 6).contains('orl')
             ]
         });
-        form.validate({ foo: 'worldx', 'bar': 'world' }, function (r) {
-            test.equals(r.isValid(), false);
-            test.equals(r.errors('foo')[0], Errors.equals);
-            test.equals(r.errors('bar').length, 0);
-            test.equals(r.value('foo'), 'worldx');
-            test.equals(r.value('bar'), 'world');
+        form.validate({ foo: 'worldx', 'bar': 'world' }, function (vForm) {
+            test.equals(vForm.isValid(), false);
+            test.equals(vForm.errors('foo')[0], Errors.equals);
+            test.equals(vForm.errors('bar').length, 0);
+            test.equals(vForm.value('foo'), 'worldx');
+            test.equals(vForm.value('bar'), 'world');
             test.done();
         });
     },
@@ -118,12 +118,12 @@ module.exports = {
                 Field({ name: 'bar' }).isLength(3, 6).contains('orl')
             ]
         });
-        form.validate({ foo: 'world', 'bar': 'world' }, function (r) {
-            test.equals(r.isValid(), true);
-            test.equals(r.errors('foo').length, 0);
-            test.equals(r.errors('bar').length, 0);
-            test.equals(r.value('foo'), 'world');
-            test.equals(r.value('bar'), 'world');
+        form.validate({ foo: 'world', 'bar': 'world' }, function (vForm) {
+            test.equals(vForm.isValid(), true);
+            test.equals(vForm.errors('foo').length, 0);
+            test.equals(vForm.errors('bar').length, 0);
+            test.equals(vForm.value('foo'), 'world');
+            test.equals(vForm.value('bar'), 'world');
             test.done();
         });
     },
@@ -134,12 +134,12 @@ module.exports = {
                 Field({ name: 'bar' }).isLength(3, 6).contains('orl')
             ]
         });
-        form.validate({ foo: ' world      ', 'bar': 'world' }, function (r) {
-            test.equals(r.isValid(), true);
-            test.equals(r.errors('foo').length, 0);
-            test.equals(r.errors('bar').length, 0);
-            test.equals(r.value('foo'), 'world');
-            test.equals(r.value('bar'), 'world');
+        form.validate({ foo: ' world      ', 'bar': 'world' }, function (vForm) {
+            test.equals(vForm.isValid(), true);
+            test.equals(vForm.errors('foo').length, 0);
+            test.equals(vForm.errors('bar').length, 0);
+            test.equals(vForm.value('foo'), 'world');
+            test.equals(vForm.value('bar'), 'world');
             test.done();
         });
     },
@@ -151,12 +151,12 @@ module.exports = {
                 Field({ name: 'boo' }).optional().isEmail()
             ]
         });
-        form.validate({ foo: 'hello', 'bar': 'hello' }, function (r) {
-            test.equals(r.isValid(), true);
-            test.equals(r.errors('foo').length, 0);
-            test.equals(r.errors('bar').length, 0);
-            test.equals(r.value('foo'), 'hello');
-            test.equals(r.value('bar'), 'hello');
+        form.validate({ foo: 'hello', 'bar': 'hello' }, function (vForm) {
+            test.equals(vForm.isValid(), true);
+            test.equals(vForm.errors('foo').length, 0);
+            test.equals(vForm.errors('bar').length, 0);
+            test.equals(vForm.value('foo'), 'hello');
+            test.equals(vForm.value('bar'), 'hello');
             test.done();
         });
     },
@@ -168,12 +168,12 @@ module.exports = {
                 Field({ name: 'boo' }).optional().isEmail()
             ]
         });
-        form.validate({ foo: 'hello', bar: 'hello', boo: 'hello@world.com' }, function (r) {
-            test.equals(r.isValid(), true);
-            test.equals(r.errors('foo').length, 0);
-            test.equals(r.errors('bar').length, 0);
-            test.equals(r.value('foo'), 'hello');
-            test.equals(r.value('bar'), 'hello');
+        form.validate({ foo: 'hello', bar: 'hello', boo: 'hello@world.com' }, function (vForm) {
+            test.equals(vForm.isValid(), true);
+            test.equals(vForm.errors('foo').length, 0);
+            test.equals(vForm.errors('bar').length, 0);
+            test.equals(vForm.value('foo'), 'hello');
+            test.equals(vForm.value('bar'), 'hello');
             test.done();
         });
     },
@@ -185,14 +185,14 @@ module.exports = {
                 Field({ name: 'boo' }).optional().isEmail()
             ]
         });
-        form.validate({ foo: 'hello', bar: 'hello', boo: 'hello' }, function (r) {
-            test.equals(r.isValid(), false);
-            test.equals(r.errors('foo').length, 0);
-            test.equals(r.errors('bar').length, 0);
-            test.equals(r.errors('boo')[0], Errors.isEmail);
-            test.equals(r.value('foo'), 'hello');
-            test.equals(r.value('bar'), 'hello');
-            test.equals(r.value('boo'), 'hello');
+        form.validate({ foo: 'hello', bar: 'hello', boo: 'hello' }, function (vForm) {
+            test.equals(vForm.isValid(), false);
+            test.equals(vForm.errors('foo').length, 0);
+            test.equals(vForm.errors('bar').length, 0);
+            test.equals(vForm.errors('boo')[0], Errors.isEmail);
+            test.equals(vForm.value('foo'), 'hello');
+            test.equals(vForm.value('bar'), 'hello');
+            test.equals(vForm.value('boo'), 'hello');
             test.done();
         });
     },
@@ -203,13 +203,13 @@ module.exports = {
                 Field({ name: 'bar' }).equals(Field('boo')),
             ]
         });
-        form.validate({ foo: 'hello', bar: 'hello', boo: 'hello' }, function (r) {
-            test.equals(r.isValid(), false);
-            test.equals(r.globalErrors()[0], Errors._unknownField);
-            test.equals(r.errors('foo').length, 0);
-            test.equals(r.errors('bar').length, 0);
-            test.equals(r.value('foo'), 'hello');
-            test.equals(r.value('bar'), 'hello');
+        form.validate({ foo: 'hello', bar: 'hello', boo: 'hello' }, function (vForm) {
+            test.equals(vForm.isValid(), false);
+            test.equals(vForm.globalErrors()[0], Errors._unknownField);
+            test.equals(vForm.errors('foo').length, 0);
+            test.equals(vForm.errors('bar').length, 0);
+            test.equals(vForm.value('foo'), 'hello');
+            test.equals(vForm.value('bar'), 'hello');
             test.done();
         });
     },
@@ -224,12 +224,12 @@ module.exports = {
                 Field({ name: 'bar' }).is42()
             ]
         });
-        form.validate({ foo: ' 42      ', 'bar': '42' }, function (r) {
-            test.equals(r.isValid(), true);
-            test.equals(r.errors('foo').length, 0);
-            test.equals(r.errors('bar').length, 0);
-            test.equals(r.value('foo'), '42');
-            test.equals(r.value('bar'), '42');
+        form.validate({ foo: ' 42      ', 'bar': '42' }, function (vForm) {
+            test.equals(vForm.isValid(), true);
+            test.equals(vForm.errors('foo').length, 0);
+            test.equals(vForm.errors('bar').length, 0);
+            test.equals(vForm.value('foo'), '42');
+            test.equals(vForm.value('bar'), '42');
             test.done();
         });
     },
@@ -244,12 +244,12 @@ module.exports = {
                 Field({ name: 'bar' }).is42()
             ]
         });
-        form.validate({ foo: ' 43      ', 'bar': '43' }, function (r) {
-            test.equals(r.isValid(), false);
-            test.equals(r.errors('foo').length, 0);
-            test.equals(r.errors('bar'), Errors.is42);
-            test.equals(r.value('foo'), '43');
-            test.equals(r.value('bar'), '43');
+        form.validate({ foo: ' 43      ', 'bar': '43' }, function (vForm) {
+            test.equals(vForm.isValid(), false);
+            test.equals(vForm.errors('foo').length, 0);
+            test.equals(vForm.errors('bar'), Errors.is42);
+            test.equals(vForm.value('foo'), '43');
+            test.equals(vForm.value('bar'), '43');
             test.done();
         });
     },
@@ -264,12 +264,12 @@ module.exports = {
                 Field({ name: 'bar' }).startsWith('4')
             ]
         });
-        form.validate({ foo: ' 42      ', 'bar': '42' }, function (r) {
-            test.equals(r.isValid(), true);
-            test.equals(r.errors('foo').length, 0);
-            test.equals(r.errors('bar').length, 0);
-            test.equals(r.value('foo'), '42');
-            test.equals(r.value('bar'), '42');
+        form.validate({ foo: ' 42      ', 'bar': '42' }, function (vForm) {
+            test.equals(vForm.isValid(), true);
+            test.equals(vForm.errors('foo').length, 0);
+            test.equals(vForm.errors('bar').length, 0);
+            test.equals(vForm.value('foo'), '42');
+            test.equals(vForm.value('bar'), '42');
             test.done();
         });
     },
@@ -284,12 +284,12 @@ module.exports = {
                 Field({ name: 'bar' }).startsWith('4')
             ]
         });
-        form.validate({ foo: ' 69      ', 'bar': '69' }, function (r) {
-            test.equals(r.isValid(), false);
-            test.equals(r.errors('foo').length, 0);
-            test.equals(r.errors('bar'), Errors.startsWith);
-            test.equals(r.value('foo'), '69');
-            test.equals(r.value('bar'), '69');
+        form.validate({ foo: ' 69      ', 'bar': '69' }, function (vForm) {
+            test.equals(vForm.isValid(), false);
+            test.equals(vForm.errors('foo').length, 0);
+            test.equals(vForm.errors('bar'), Errors.startsWith);
+            test.equals(vForm.value('foo'), '69');
+            test.equals(vForm.value('bar'), '69');
             test.done();
         });
     },
@@ -300,12 +300,12 @@ module.exports = {
                 Field({ name: 'bar' }).isLength(3, 6).contains('orl')
             ]
         });
-        form.validate({ foo: 'hello@world.com', 'bar': 'world' }, function (r) {
-            test.equals(r.isValid(), true);
-            test.equals(r.errors('foo').length, 0);
-            test.equals(r.errors('bar').length, 0);
-            test.equals(r.value('foo'), 'hello@world.com');
-            test.equals(r.value('bar'), 'world');
+        form.validate({ foo: 'hello@world.com', 'bar': 'world' }, function (vForm) {
+            test.equals(vForm.isValid(), true);
+            test.equals(vForm.errors('foo').length, 0);
+            test.equals(vForm.errors('bar').length, 0);
+            test.equals(vForm.value('foo'), 'hello@world.com');
+            test.equals(vForm.value('bar'), 'world');
             test.done();
         });
     },
@@ -316,12 +316,12 @@ module.exports = {
                 Field({ name: 'bar' }).isLength(3, 6).contains('orl')
             ]
         });
-        form.validate({ foo: 'hello%world.com', 'bar': 'world' }, function (r) {
-            test.equals(r.isValid(), false);
-            test.equals(r.errors('foo')[0], Errors.isEmail);
-            test.equals(r.errors('bar').length, 0);
-            test.equals(r.value('foo'), 'hello%world.com');
-            test.equals(r.value('bar'), 'world');
+        form.validate({ foo: 'hello%world.com', 'bar': 'world' }, function (vForm) {
+            test.equals(vForm.isValid(), false);
+            test.equals(vForm.errors('foo')[0], Errors.isEmail);
+            test.equals(vForm.errors('bar').length, 0);
+            test.equals(vForm.value('foo'), 'hello%world.com');
+            test.equals(vForm.value('bar'), 'world');
             test.done();
         });
     },
