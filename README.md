@@ -14,7 +14,6 @@ npm install torti
 Here we define a simple form with some fields that contain validators and sanity functions.
 
 ```javascript
-
 var Form = require('torti');
 var Field = Form.Field;
 
@@ -31,14 +30,15 @@ var signupForm = Form({
 });
 
 console.log(signupForm.render());
-/* {
-     method: 'POST', action: '/signup', foo: 'bar',
-     fields: [
-       { name: 'email', value: '', errors: [] },
-       { name: 'password', value: '', errors: [] },
-       { name: 'password2', value: '', errors: [] },
-       { name: 'username', value: '', errors: [] } ],
-    valid: true
+/*
+  {
+      method: 'POST', action: '/signup', foo: 'bar',
+      fields: [
+          { name: 'email', value: '', errors: [] },
+          { name: 'password', value: '', errors: [] },
+          { name: 'password2', value: '', errors: [] },
+          { name: 'username', value: '', errors: [] } ],
+      valid: true
   }
 */
 
@@ -49,34 +49,36 @@ var body = {
     username: 'Chuck_Norris'
 };
 
-var vForm = signupForm.validate(body);
-console.log(vForm.render());
-/*
- {
-     method: 'POST', action: '/signup',
-     fields: [
-       { name: 'email', value: 'foo@bar.com', errors: [] },
-       { name: 'password', value: '123456', errors: [] },
-       { name: 'password2', value: '123456', errors: [] },
-       { name: 'username' }, value: 'Chuck_Norris', errors: [] ],
-    valid: true
-  }
-*/
+signupForm.validate(body, function (vForm) {
+    console.log(vForm.render());
+    /*
+      {
+          method: 'POST', action: '/signup',
+          fields: [
+              { name: 'email', value: 'foo@bar.com', errors: [] },
+              { name: 'password', value: '123456', errors: [] },
+              { name: 'password2', value: '123456', errors: [] },
+              { name: 'username' }, value: 'Chuck_Norris', errors: [] ],
+          valid: true
+      }
+    */
+    body.username = '$$$$$$';
+    vForm.validate(body, function (vForm) {
+        console.log(vForm.render());
+       /*
+         {
+             method: 'POST', action: '/signup',
+             fields: [
+                 { name: 'email', value: 'foo@bar.com', errors: [] },
+                 { name: 'password', value: '123456', errors: [] },
+                 { name: 'password2', value: '123456', errors: [] },
+                 { name: 'username' }, value: '$$$$$$', errors: [ 'format' ] ],
+             valid: false
+         }
+       */
+    });
+});
 
-body.username = '$$$$$$';
-var vForm = vForm.validate(body)
-console.log(vForm.render());
-/*
- {
-     method: 'POST', action: '/signup',
-     fields: [
-       { name: 'email', value: 'foo@bar.com', errors: [] },
-       { name: 'password', value: '123456', errors: [] },
-       { name: 'password2', value: '123456', errors: [] },
-       { name: 'username' }, value: '$$$$$$', errors: [ 'format' ] ],
-    valid: false
-  }
-*/
 ```
 
 ### Example 2: With express
@@ -88,12 +90,13 @@ router.get('/signup', function (req, res, next) {
 });
 
 router.post('/signup', function (req, res, next) {
-    var vForm = signupForm.validate(req.body);
-    if (vForm.isValid() !== true) {
-        res.render('signup', { form: vForm.render() });
-    } else {
-        res.end('Welcome ' + vForm.value('username'));
-    }
+    signupForm.validate(req.body, function (vForm) {
+        if (!vForm.isValid()) {
+            res.render('signup', { form: vForm.render() });
+        } else {
+            res.end('Welcome ' + vForm.value('username'));
+        }
+    });
 });
 
 ```
@@ -124,12 +127,13 @@ router.get('/signup', function (req, res, next) {
 });
 
 router.post('/signup', function (req, res, next) {
-    var vForm = signupForm.validate(req.body);
-    if (vForm.isValid() !== true) {
-        res.render('signup', { form: vForm.render() });
-    } else {
-        res.end('Welcome ' + vForm.value('username'));
-    }
+    signupForm.validate(req.body, function (vForm) {
+        if (vForm.isValid() !== true) {
+            res.render('signup', { form: vForm.render() });
+        } else {
+            res.end('Welcome ' + vForm.value('username'));
+        }
+    });
 });
 ```
 
@@ -194,26 +198,28 @@ var data = {
    password: '123456',
    password2: '123456',   
 };
-var vForm = myForm.validate(data);
-console.log(vForm.isValid());
-/*
-true
-*/
-console.log(vForm.render());
-/*
-{
-    hello: 'world',
-    fields: [
-        { name: 'email', value: 'foo@bar.com', errors: [] },
-        { name: 'password', foo: 'bar', value: '123456', errors: [] },
-        { name: 'password2', value: '123456', errors: [] },
-    valid: true
-}
-*/
-console.log(vForm.value('email'));
-/*
-foo@bar.com
-*/
+myForm.validate(data, function (vForm) {
+    console.log(vForm.isValid());
+    /*
+      true
+    */
+    console.log(vForm.render());
+    /*
+      {
+          hello: 'world',
+          fields: [
+              { name: 'email', value: 'foo@bar.com', errors: [] },
+              { name: 'password', foo: 'bar', value: '123456', errors: [] },
+              { name: 'password2', value: '123456', errors: [] },
+          ],
+          valid: true
+      }
+    */
+    console.log(vForm.value('email'));
+    /*
+      foo@bar.com
+    */
+});
 ```
 
 ### 3. [FieldValidators](lib/README.md#module_FieldValidators)

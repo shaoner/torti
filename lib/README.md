@@ -18,6 +18,8 @@
 </dl>
 ## Typedefs
 <dl>
+<dt><a href="#notifyResult">notifyResult</a> : <code>function</code></dt>
+<dd></dd>
 <dt><a href="#validateCallback">validateCallback</a> ⇒ <code>Boolean</code> | <code>string</code></dt>
 <dd></dd>
 </dl>
@@ -33,7 +35,7 @@
   * [.errors()](#Field#errors) ⇒ <code>string</code>
   * [.addError(error)](#Field#addError)
   * [.optional()](#Field#optional) ⇒ <code>[Field](#Field)</code>
-  * [.validate(body)](#Field#validate)
+  * [.validate([body], done)](#Field#validate)
   * [.equals(comparison)](#Field#equals) ⇒ <code>[Field](#Field)</code>
   * [.contains(seed)](#Field#contains) ⇒ <code>[Field](#Field)</code>
   * [.matches(pattern, [modifier])](#Field#matches) ⇒ <code>[Field](#Field)</code>
@@ -147,14 +149,15 @@ Set the field as optional
 
 **Kind**: instance method of <code>[Field](#Field)</code>  
 <a name="Field#validate"></a>
-### field.validate(body)
+### field.validate([body], done)
 Validate a field
 
 **Kind**: instance method of <code>[Field](#Field)</code>  
 
-| Param | Type | Description |
-| --- | --- | --- |
-| body | <code>Object.&lt;string, string&gt;</code> | All form values |
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [body] | <code>Object.&lt;string, string&gt;</code> | <code>{}</code> | All form values |
+| done | <code>function</code> |  | Callback giving the validation result |
 
 <a name="Field#equals"></a>
 ### field.equals(comparison) ⇒ <code>[Field](#Field)</code>
@@ -581,7 +584,7 @@ Convert the field value to uppercase
   * [.errors()](#Field#errors) ⇒ <code>string</code>
   * [.addError(error)](#Field#addError)
   * [.optional()](#Field#optional) ⇒ <code>[Field](#Field)</code>
-  * [.validate(body)](#Field#validate)
+  * [.validate([body], done)](#Field#validate)
   * [.equals(comparison)](#Field#equals) ⇒ <code>[Field](#Field)</code>
   * [.contains(seed)](#Field#contains) ⇒ <code>[Field](#Field)</code>
   * [.matches(pattern, [modifier])](#Field#matches) ⇒ <code>[Field](#Field)</code>
@@ -666,7 +669,7 @@ Form email field
     * [.refresh()](#Form#refresh)
     * [.get(fieldName)](#Form#get) ⇒ <code>[Field](#Field)</code>
     * [.isValid()](#Form#isValid) ⇒ <code>Boolean</code>
-    * [.validate([...body], [stop])](#Form#validate) ⇒ <code>[Form](#Form)</code>
+    * [.validate([...body], done)](#Form#validate)
     * [.render([refresh])](#Form#render) ⇒ <code>Object.&lt;string, \*&gt;</code>
   * _static_
     * [.validators](#Form.validators) : <code>Object.&lt;string, ?string&gt;</code>
@@ -788,7 +791,7 @@ Check if the form is valid
 
 **Kind**: instance method of <code>[Form](#Form)</code>  
 <a name="Form#validate"></a>
-### form.validate([...body], [stop]) ⇒ <code>[Form](#Form)</code>
+### form.validate([...body], done)
 Validate a complete form and returns a new populated form
 
 **Kind**: instance method of <code>[Form](#Form)</code>  
@@ -796,7 +799,7 @@ Validate a complete form and returns a new populated form
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | [...body] | <code>Object.&lt;string, \*&gt;</code> | <code>{}</code> | Body matching the form |
-| [stop] | <code>Boolean</code> | <code>false</code> | Stop at first error |
+| done | <code>function</code> |  | Callback sending the new form |
 
 <a name="Form#render"></a>
 ### form.render([refresh]) ⇒ <code>Object.&lt;string, \*&gt;</code>
@@ -831,12 +834,22 @@ Add a new validator
 <a name="FieldValidators"></a>
 ## FieldValidators : <code>[validateCallback](#validateCallback)</code>
 **Kind**: global enum  
+<a name="notifyResult"></a>
+## notifyResult : <code>function</code>
+**Kind**: global typedef  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| result | <code>Boolean</code> | The result of the validation |
+| [value] | <code>\*</code> | The new value of the field |
+
 <a name="validateCallback"></a>
 ## validateCallback ⇒ <code>Boolean</code> \| <code>string</code>
 **Kind**: global typedef  
 
 | Param | Type | Description |
 | --- | --- | --- |
+| done | <code>[notifyResult](#notifyResult)</code> | Callback to send back the result |
 | value | <code>string</code> | Field's value |
 | [args] | <code>\*</code> | Validator arguments |
 

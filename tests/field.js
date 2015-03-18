@@ -1,6 +1,7 @@
 var Form = require('../index');
 var Field = Form.Field;
 var EmailField = Form.EmailField;
+var Errors = Form.Errors;
 
 module.exports = {
     Field_empty: function (test) {
@@ -57,54 +58,63 @@ module.exports = {
         var clone = f.clone();
 
         clone.setValue('bar');
-        test.equals(clone.validate(), false);
-        test.equals(clone.errors()[0], 'length');
-
-        clone.setValue('barjo');
-        test.equals(clone.validate(), false);
-        test.equals(clone.errors()[0], 'format');
-
-        clone.setValue('barjo@nomail.com');
-        test.equals(clone.validate(), true);
-        test.equals(clone.errors().length, 0);
-        test.done();
+        clone.validate(function (valid) {
+            test.equals(valid, false);
+            test.equals(this.errors()[0], Errors.isLength);
+            clone.setValue('barjo');
+            clone.validate(function (valid) {
+                test.equals(valid, false);
+                test.equals(this.errors()[0], Errors.isEmail);
+                clone.setValue('barjo@nomail.com');
+                clone.validate(function (valid) {
+                    test.equals(valid, true);
+                    test.equals(this.errors().length, 0);
+                    test.done();
+                });
+            });
+        });
     },
     Field_clone_with_errors: function (test) {
         var f = Field({ name: 'foo', hello: 'world' }).isLength(5, 20).isEmail();
         var clone = f.clone();
         f.setValue('bar');
-        f.validate();
-        test.equals(f.errors().length, 1);
-        test.equals(clone.errors().length, 0);
-        test.done();
+        f.validate(function (valid) {
+            test.equals(this.errors().length, 1);
+            test.equals(clone.errors().length, 0);
+            test.done();
+        });
     },
     Field_capitalize: function (test) {
         var f = Field({ name: 'foo' }).trim().capitalize();
         f.setValue('  bar ');
-        f.validate();
-        test.equals(f.value(), 'Bar');
-        test.done();
+        f.validate(function () {
+            test.equals(f.value(), 'Bar');
+            test.done();
+        });
     },
     Field_truncate: function (test) {
         var f = Field({ name: 'foo' }).trunc(10);
         f.setValue('Hello the world !');
-        f.validate();
-        test.equals(f.value().length, 10);
-        test.equals(f.value(), 'Hello t...');
-        test.done();
+        f.validate(function () {
+            test.equals(this.value().length, 10);
+            test.equals(this.value(), 'Hello t...');
+            test.done();
+        });
     },
     Field_lower: function (test) {
         var f = Field({ name: 'foo' }).lower();
         f.setValue('BaR');
-        f.validate();
-        test.equals(f.value(), 'bar');
-        test.done();
+        f.validate(function () {
+            test.equals(this.value(), 'bar');
+            test.done();
+        });
     },
     Field_upper: function (test) {
         var f = Field({ name: 'foo' }).upper();
         f.setValue('bAr');
-        f.validate();
-        test.equals(f.value(), 'BAR');
-        test.done();
+        f.validate(function () {
+            test.equals(this.value(), 'BAR');
+            test.done();
+        });
     }
 };
