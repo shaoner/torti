@@ -7,6 +7,10 @@ Form generator &amp; validator for node using [validator](https://github.com/chr
 npm install torti
 ```
 
+## API
+
+Documentation is [here](lib/README.md)
+
 ## How it works?
 
 ### Example 1: Simple
@@ -252,10 +256,6 @@ var myFields = [
 
 You can also use pre-defined fields:
 * [EmailField](lib/README.md#EmailField): EmailField(options) ⇒ Field(options).trim().isEmail().normalizeEmail()
-
-## API
-
-Documentation is [here](lib/README.md)
 
 ## Contributing
 
