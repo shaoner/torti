@@ -257,6 +257,12 @@ var myFields = [
 You can also use pre-defined fields:
 * [EmailField](lib/README.md#EmailField): EmailField(options) ⇒ Field(options).trim().isEmail().normalizeEmail()
 
+## Unit tests
+
+```
+npm test
+```
+
 ## Contributing
 
 Contributions are most welcome, so feel free to fork and improve.
