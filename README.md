@@ -228,21 +228,21 @@ myForm.validate(data, function (vForm) {
 
 ### 3. [FieldValidators](lib/README.md#module_FieldValidators)
 
-FieldValidators is a simple object with a string key matching a [validator](https://github.com/chriso/validator.js) function and a string value which is an error.
-For now, this object is global and cannot be defined for each Form.
-However it can be overridden by setting Form.validators to your own object.
+FieldValidators is a simple object with a string key matching the validator name and its corresponding asynchroneous function.
+For now, this object is global and cannot be defined for each Form, however you can add your own global validators using [addValidator](lib/README.md#Form.addValidator).
+
 Because of how internationalization works in [dust](https://github.com/linkedin/dustjs), I didn't want to put explicit error messages, but you're free to do it.
 
 You can also add your own validator, here is a naive example:
 
 ```javascript
 
-Form.addValidator('is42', function (value) {
-    return value == '42';
+Form.addValidator('is42', function (done, value) {
+    done(value == '42');
 }, 'error42');
 
-Form.addValidator('startsWith', function (value, comparison) {
-    return value[0] == comparison;
+Form.addValidator('startsWith', function (done, value, comparison) {
+    done(value[0] == comparison);
 }, 'errorStartsWith');
 
 var myFields = [
@@ -250,6 +250,37 @@ var myFields = [
     Field({ name: 'bar' }).startsWith('H')
 ];
 
+```
+
+As you may have noticed, validators are passed:
+* A callback to send back true or false
+* The value
+* Optional arguments that are passed during the validator call (see *startsWith('H')*)
+
+Sanitizers are almost the same, except that you can update the value:
+
+```javascript
+Form.addValidator('toLowerCase', function (done, value) {
+    done(true, value.toLowerCase());
+}, 'errorStartsWith');
+```
+
+You can also modify the value in your validator:
+
+```javascript
+Form.addValidator('is42andIncrement', function (done, value) {
+    done(value == '42', value + 1);
+}, 'error42');
+```
+
+Since validators are asynchroneous, you can imagine doing database validation:
+
+```javascript
+Form.addValidator('isUsernameAvailable', function (done, value) {
+    User.find({ username: value }, function (err, user) {
+        done(typeof err == 'undefined' && user);
+    });
+}, 'unavailable');
 ```
 
 ### 4. Predefined fields
