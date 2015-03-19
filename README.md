@@ -105,51 +105,22 @@ router.post('/signup', function (req, res, next) {
 
 ```
 
-### Example 3: Render a form with [dust](https://github.com/linkedin/dustjs) template engine
+### Example 3: Signup/signin with [Express](http://expressjs.com) and [dust](https://github.com/linkedin/dustjs) template engine
 
-##### signup.js
-```javascript
+#### The partials
 
-// 1. Define your form
+First you define a form partial matching our render object.
 
-var signupForm = Form({
-    method: 'POST',
-    action: '/signup',
-    fields: [
-        Field({ name: 'email', partial: 'email', 'autocomplete': 'off' }).trim().isEmail()
-        Field({ name: 'password', partial: 'password' }).isLength(6, 25),
-        Field({ name: 'password2', partial: 'password' }).equals(Field('password')),
-        Field({ name: 'username', partial: 'text' }).matches('[a-zA-Z_]+')    
-    ]
-});
+##### partials/form.dust
 
-// [...]
-
-// 2. Use it in your controller
-router.get('/signup', function (req, res, next) {
-    res.render('signup', { form: signupForm.render() });
-});
-
-router.post('/signup', function (req, res, next) {
-    signupForm.validate(req.body, function (vForm) {
-        if (vForm.isValid() !== true) {
-            res.render('signup', { form: vForm.render() });
-        } else {
-            res.end('Welcome ' + vForm.value('username'));
-        }
-    });
-});
-```
-
-##### form.dust
 ```html
 {#form}
     <form method="{method}" action="{action}">
-        {>"partials/form/csrf"/}
+        {>"partials/form-fields/csrf"/}
         {#fields}
-            {>"partials/form/{partial}"/}
+            {>"partials/form-fields/{partial}"/}
             {#errors}
-            <div>{.}</div>
+            <div class="errors">{.}</div>
             {/errors}
         {/fields}
         <div>
@@ -159,11 +130,102 @@ router.post('/signup', function (req, res, next) {
 {/form}
 ```
 
+In partials/form there are html components for each field, here is an example:
+
+##### partials/form-fields/email.dust
+
+```html
+Email: <input type="email" name="{name}" id="id_{name}" value="{value}"/>
+```
+
+Then, a template for each page:
+
 ##### signup.dust
+
 ```html
 <h1> Signup! </h1>
-{>"partials/form" form=signupForm submit="Create your account!"/}
+{>"partials/form" submit="Create your account!"/}
 ```
+
+##### signin.dust
+
+```html
+<h1> Signin! </h1>
+{>"partials/form" submit="Log in"/}
+```
+
+#### Routes
+
+Finally, you define the forms and the routes:
+
+##### controllers/index.js
+
+```javascript
+var Form = require('torti');
+var Field = Form.Field;
+
+var signupForm = Form({
+    method: 'POST',
+    action: '/signup',
+    fields: [
+        Field({ name: 'email', partial: 'email', 'autocomplete': 'off' }).trim().isEmail()
+        Field({ name: 'password', partial: 'password' }).isLength(6, 25),
+        Field({ name: 'password2', partial: 'password' }).equals(Field('password')),
+        Field({ name: 'username', partial: 'text' }).matches('[a-zA-Z_]+')
+    ]
+});
+
+var signinForm = Form({
+    method: 'POST',
+    action: '/signin',
+    fields: [
+        Field({ name: 'email', partial: 'email' }).trim().isEmail()
+        Field({ name: 'password', partial: 'password' }).isLength(6, 25),
+    ]
+});
+
+// Signup route
+router.route('/signup')
+    .get(function (req, res, next) {
+        res.render('signup', { form: signupForm.render() });
+    })
+    .post('/signup', function (req, res, next) {
+        signupForm.validate(req.body, function (vForm) {
+            if (!vForm.isValid()) {
+                res.render('signup', { form: vForm.render() });
+            } else {
+                // Everything is valid, we register the user
+                User.register(vForm.value(), function (err, user) {
+                   if (err) { return next(err); }
+                   res.end('Welcome ' + user.username);
+                });
+            }
+        });
+    });
+
+// Signin route
+router.route('/signin')
+    .get('/signin', function (req, res, next) {
+        res.render('signup', { form: signinForm.render() });
+    })
+    .post('/signin', function (req, res, next) {
+        signinForm.validate(req.body, function (vForm) {
+            if (!vForm.isValid()) {
+                res.render('signin', { form: vForm.render() });
+            } else {
+                // if email matches password
+                User.login(vForm.value(), function (err, user) {
+                    if (err) { return next(err); }
+                    res.end('You are connected ' + user.username);
+                });
+            }
+       });
+    });
+```
+
+See how easy and clean?
+Notice that with asynchroneous validators, you could check email / username is not already taken.
+
 ## Getting started
 
 ### 1. [Field](lib/README.md#Field)
@@ -200,7 +262,7 @@ When you want to validate your data, pass it to the form:
 var data = {
    email: 'foo@bar.com',
    password: '123456',
-   password2: '123456',   
+   password2: '123456',
 };
 myForm.validate(data, function (vForm) {
     console.log(vForm.isValid());
