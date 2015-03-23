@@ -671,6 +671,7 @@ Form email field
     * [.isValid()](#Form#isValid) ⇒ <code>Boolean</code>
     * [.validate([...body], done)](#Form#validate)
     * [.render([refresh])](#Form#render) ⇒ <code>Object.&lt;string, \*&gt;</code>
+    * [.renderWith(values)](#Form#renderWith) ⇒ <code>Object.&lt;string, \*&gt;</code>
   * _static_
     * [.validators](#Form.validators) : <code>Object.&lt;string, ?string&gt;</code>
     * [.addValidator(name, fn, error)](#Form.addValidator)
@@ -810,6 +811,16 @@ Get the associated form object
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | [refresh] | <code>Boolean</code> | <code>false</code> | If true, the form object is rebuilt |
+
+<a name="Form#renderWith"></a>
+### form.renderWith(values) ⇒ <code>Object.&lt;string, \*&gt;</code>
+Get the associated form object populated with values
+
+**Kind**: instance method of <code>[Form](#Form)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| values | <code>Object.&lt;string, \*&gt;</code> | Values in the form of { fieldName: fieldValue } |
 
 <a name="Form.validators"></a>
 ### Form.validators : <code>Object.&lt;string, ?string&gt;</code>

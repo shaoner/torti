@@ -384,5 +384,18 @@ module.exports = {
         form.refresh();
         test.equals(form.render().errors[0], 'Oh no!');
         test.done();
+    },
+    Form_render_with_values: function (test) {
+        var form = Form({
+            fields: [
+                Field({ name: 'foo' }),
+                Field({ name: 'bar' }).isLength(3, 6).contains('orl')
+            ]
+        });
+        var r = form.renderWith({ foo: 'foo@bar.com' });
+        test.equals(r.fields[0].value, 'foo@bar.com');
+        var r2 = form.render();
+        test.equals(r2.fields[0].value, '');
+        test.done();
     }
 };
