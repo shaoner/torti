@@ -49,12 +49,12 @@ var data = {
    password: '123456',
    password2: '123456',
 };
-myForm.validate(data, function (vForm) {
-    console.log(vForm.isValid());
+myForm.validate(data, function (form) {
+    console.log(form.isValid());
     /*
       true
     */
-    console.log(vForm.render());
+    console.log(form.render());
     /*
       {
           hello: 'world',
@@ -66,7 +66,7 @@ myForm.validate(data, function (vForm) {
           valid: true
       }
     */
-    console.log(vForm.value('email'));
+    console.log(form.value('email'));
     /*
       foo@bar.com
     */
@@ -141,7 +141,7 @@ If you don't provide a callback to validate functions, it returns a promise:
 
 ```javascript
 myForm.validate(data)
-    .then(function (vForm) {
+    .then(function (form) {
         console.log('This form is valid!');
     }, function (form) {
         console.log('This form is not valid and contains some validation errors.');
@@ -192,8 +192,8 @@ var body = {
     username: 'Chuck_Norris'
 };
 
-signupForm.validate(body, function (vForm) {
-    console.log(vForm.render());
+signupForm.validate(body, function (form) {
+    console.log(form.render());
     /*
       {
           method: 'POST', action: '/signup',
@@ -206,8 +206,8 @@ signupForm.validate(body, function (vForm) {
       }
     */
     body.username = '$$$$$$';
-    vForm.validate(body, function (vForm) {
-        console.log(vForm.render());
+    form.validate(body, function (form) {
+        console.log(form.render());
        /*
          {
              method: 'POST', action: '/signup',
@@ -233,11 +233,11 @@ router.get('/signup', function (req, res, next) {
 });
 
 router.post('/signup', function (req, res, next) {
-    signupForm.validate(req.body, function (vForm) {
-        if (!vForm.isValid()) {
-            res.render('signup', { form: vForm.render() });
+    signupForm.validate(req.body, function (form) {
+        if (!form.isValid()) {
+            res.render('signup', { form: form.render() });
         } else {
-            res.end('Welcome ' + vForm.value('username'));
+            res.end('Welcome ' + form.value('username'));
         }
     });
 });
@@ -329,12 +329,12 @@ router.route('/signup')
         res.render('signup', { form: signupForm.render() });
     })
     .post('/signup', function (req, res, next) {
-        signupForm.validate(req.body, function (vForm) {
-            if (!vForm.isValid()) {
-                res.render('signup', { form: vForm.render() });
+        signupForm.validate(req.body, function (form) {
+            if (!form.isValid()) {
+                res.render('signup', { form: form.render() });
             } else {
                 // Everything is valid, we register the user
-                User.register(vForm.value(), function (err, user) {
+                User.register(form.value(), function (err, user) {
                    if (err) { return next(err); }
                    res.end('Welcome ' + user.username);
                 });
@@ -348,12 +348,12 @@ router.route('/signin')
         res.render('signup', { form: signinForm.render() });
     })
     .post('/signin', function (req, res, next) {
-        signinForm.validate(req.body, function (vForm) {
-            if (!vForm.isValid()) {
-                res.render('signin', { form: vForm.render() });
+        signinForm.validate(req.body, function (form) {
+            if (!form.isValid()) {
+                res.render('signin', { form: form.render() });
             } else {
                 // if email matches password
-                User.login(vForm.value(), function (err, user) {
+                User.login(form.value(), function (err, user) {
                     if (err) { return next(err); }
                     res.end('You are connected ' + user.username);
                 });
