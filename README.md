@@ -150,6 +150,85 @@ myForm.validate(data)
 
 Take a look at [bluebird](https://github.com/petkaantonov/bluebird) if you're not familiar with promises.
 
+### 6. Rendering
+
+The form is rendered as a javascript object using the [render](lib/README.md#Form#render) method of Form class.
+
+Why not HTML?
+
+Because I think HTML has nothing to do with this part of the code, HTML is just a way to display the form. Moreover you may want to display your forms differently according to the page or use JSON.
+This allows to customize the way you want to actually render it in your templates.
+
+The rendered object contains:
+* All the properties you passed in the [Form constructor](lib/README.md#new_Form_new).
+* A property *errors*, which is an array of global errors.
+* A property *valid*, which is a simple boolean saying if the form is valid or not.
+* A property *fields* which is an array of field objects.
+A field object contains:
+* All the properties you passed in the [Field constructor](lib/README.md#new_Field_new).
+* A property *name*, which is the name of the field
+* A property *value*, which is the value of the field or an empty string
+* A property *errors*, which is an array of validation errors
+
+```javascript
+var form = Form({
+    hello: 'World',
+    fields: [
+        Field({ name: 'email', foo: 'bar' }).isEmail().lower().isLength(15, 50),
+        Field({ name: 'username', bar: 'foo' }).isLength(15, 50)
+    ]
+});
+
+console.log(form.render());
+/*
+{
+    hello: 'World',
+    fields: [
+        { name: 'email', foo: 'bar', value: '', errors: [] },
+        { name: 'username', bar: 'foo', value: '', errors: [] }
+    ],
+    valid: true,
+    errors: []
+}
+*/
+
+console.log(form.render({
+    email: {
+        value: 'shaoner@nomail.com',
+        foo: 'notbar'
+    }
+}));
+/*
+{
+    hello: 'World',
+    fields: [
+        { name: 'email', foo: 'notbar', value: 'shaoner@nomail.com', errors: [] },
+        { name: 'username', bar: 'foo', value: '', errors: [] }
+    ],
+    valid: true,
+    errors: []
+}
+*/
+
+form.validate({
+    email: 'shaoner@nomail.com',
+    username: 'foo'
+}, function (form) {
+    console.log(util.inspect(form.render(), { depth: 3 }));
+    /*
+    {
+        hello: 'World',
+        fields: [
+            { name: 'email', foo: 'bar', value: 'shaoner@nomail.com', errors: [] },
+            { name: 'username', bar: 'foo', value: 'foo', errors: [ 'length' ] }
+        ],
+        valid: false,
+        errors: []
+    }
+    */
+});
+```
+
 ## Some examples
 
 ### Example 1: Simple
