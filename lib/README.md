@@ -814,7 +814,7 @@ Get the associated form object
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| [refresh] | <code>Boolean</code> | <code>false</code> | If true, the form object is rebuilt |
+| [refresh] | <code>Boolean</code> \| <code>Object.&lt;string, \*&gt;</code> | <code>false</code> | If true, the form object is rebuilt. It can also be an object in the form: {   fieldName1: { prop1: value1, prop2: value2 },   fieldName2: { prop3: value3, prop2: value2 } } |
 
 <a name="Form#renderWith"></a>
 ### form.renderWith(values) ⇒ <code>Object.&lt;string, \*&gt;</code>

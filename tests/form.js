@@ -397,5 +397,25 @@ module.exports = {
         var r2 = form.render();
         test.equals(r2.fields[0].value, '');
         test.done();
+    },
+    Form_render_with_custom_properties: function (test) {
+        var form = Form({
+            fields: [
+                Field({ name: 'foo' }),
+                Field({ name: 'bar' }).isLength(3, 6).contains('orl')
+            ]
+        });
+        var r = form.render({
+            foo: { hello: 'world' },
+            bar: { value: 'world', custom: 'baz' }
+        });
+        test.equals(r.fields[0].hello, 'world');
+        test.equals(r.fields[1].value, 'world');
+        test.equals(r.fields[1].custom, 'baz');
+        var r2 = form.render();
+        test.equals(r2.fields[0].hello, undefined);
+        test.equals(r2.fields[1].value, '');
+        test.equals(r2.fields[1].custom, undefined);
+        test.done();
     }
 };
