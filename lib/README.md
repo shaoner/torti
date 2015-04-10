@@ -35,7 +35,7 @@
   * [.errors()](#Field#errors) ⇒ <code>string</code>
   * [.addError(error)](#Field#addError)
   * [.optional()](#Field#optional) ⇒ <code>[Field](#Field)</code>
-  * [.validate([body], done)](#Field#validate)
+  * [.validate([body], [done])](#Field#validate) ⇒ <code>Promise</code> \| <code>undefined</code>
   * [.equals(comparison)](#Field#equals) ⇒ <code>[Field](#Field)</code>
   * [.contains(seed)](#Field#contains) ⇒ <code>[Field](#Field)</code>
   * [.matches(pattern, [modifier])](#Field#matches) ⇒ <code>[Field](#Field)</code>
@@ -149,15 +149,17 @@ Set the field as optional
 
 **Kind**: instance method of <code>[Field](#Field)</code>  
 <a name="Field#validate"></a>
-### field.validate([body], done)
+### field.validate([body], [done]) ⇒ <code>Promise</code> \| <code>undefined</code>
 Validate a field
+If no callback is given, it returns a Promise
 
 **Kind**: instance method of <code>[Field](#Field)</code>  
+**Returns**: <code>Promise</code> \| <code>undefined</code> - - A new promise or undefined  
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | [body] | <code>Object.&lt;string, string&gt;</code> | <code>{}</code> | All form values |
-| done | <code>function</code> |  | Callback giving the validation result |
+| [done] | <code>function</code> |  | Callback giving the validation result |
 
 <a name="Field#equals"></a>
 ### field.equals(comparison) ⇒ <code>[Field](#Field)</code>
@@ -584,7 +586,7 @@ Convert the field value to uppercase
   * [.errors()](#Field#errors) ⇒ <code>string</code>
   * [.addError(error)](#Field#addError)
   * [.optional()](#Field#optional) ⇒ <code>[Field](#Field)</code>
-  * [.validate([body], done)](#Field#validate)
+  * [.validate([body], [done])](#Field#validate) ⇒ <code>Promise</code> \| <code>undefined</code>
   * [.equals(comparison)](#Field#equals) ⇒ <code>[Field](#Field)</code>
   * [.contains(seed)](#Field#contains) ⇒ <code>[Field](#Field)</code>
   * [.matches(pattern, [modifier])](#Field#matches) ⇒ <code>[Field](#Field)</code>
@@ -669,7 +671,7 @@ Form email field
     * [.refresh()](#Form#refresh)
     * [.get(fieldName)](#Form#get) ⇒ <code>[Field](#Field)</code>
     * [.isValid()](#Form#isValid) ⇒ <code>Boolean</code>
-    * [.validate([...body], done)](#Form#validate)
+    * [.validate([...body], [done])](#Form#validate) ⇒ <code>Promise</code> \| <code>undefined</code>
     * [.render([refresh])](#Form#render) ⇒ <code>Object.&lt;string, \*&gt;</code>
     * [.renderWith(values)](#Form#renderWith) ⇒ <code>Object.&lt;string, \*&gt;</code>
   * _static_
@@ -792,15 +794,17 @@ Check if the form is valid
 
 **Kind**: instance method of <code>[Form](#Form)</code>  
 <a name="Form#validate"></a>
-### form.validate([...body], done)
+### form.validate([...body], [done]) ⇒ <code>Promise</code> \| <code>undefined</code>
 Validate a complete form and returns a new populated form
+If no callback is given, it returns a Promise
 
 **Kind**: instance method of <code>[Form](#Form)</code>  
+**Returns**: <code>Promise</code> \| <code>undefined</code> - - A new promise or undefined  
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | [...body] | <code>Object.&lt;string, \*&gt;</code> | <code>{}</code> | Body matching the form |
-| done | <code>function</code> |  | Callback sending the new form |
+| [done] | <code>function</code> |  | Callback sending the new form |
 
 <a name="Form#render"></a>
 ### form.render([refresh]) ⇒ <code>Object.&lt;string, \*&gt;</code>

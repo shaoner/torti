@@ -23,7 +23,8 @@
   },
   "dependencies": {
     "validator": "~3.33.0",
-    "lodash": "~3.4.0"
+    "lodash": "~3.4.0",
+    "bluebird": "~2.9.24"
   },
   "devDependencies": {
     "nodeunit": "~0.9.1"

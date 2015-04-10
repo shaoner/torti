@@ -135,6 +135,21 @@ Form.addValidator('isUsernameAvailable', function (done, value) {
 You can also use pre-defined fields:
 * [EmailField](lib/README.md#EmailField): EmailField(options) ⇒ Field(options).trim().isEmail().normalizeEmail()
 
+### 5. Promises
+
+If you don't provide a callback to validate functions, it returns a promise:
+
+```javascript
+myForm.validate(data)
+    .then(function (vForm) {
+        console.log('This form is valid!');
+    }, function (form) {
+        console.log('This form is not valid and contains some validation errors.');
+    });
+```
+
+Take a look at [bluebird](https://github.com/petkaantonov/bluebird) if you're not familiar with promises.
+
 ## Some examples
 
 ### Example 1: Simple
