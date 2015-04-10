@@ -4,6 +4,25 @@ var EmailField = Form.EmailField;
 var Errors = Form.Errors;
 
 module.exports = {
+    Form_check_promise_reject_type: function (test) {
+        var form = Form({
+            fields: [
+                Field({ name: 'foo' }),
+                Field({ name: 'bar' })
+            ]
+        });
+        form.validate({ foo: 'hello' })
+            .then(function () {
+                test.ok(false);
+            }).catch(Form.ValidationError, function (err) {
+                var vForm = err.form;
+                test.equals(vForm.isValid(), false);
+                test.equals(vForm.errors('foo').length, 0);
+                test.equals(vForm.errors('bar').length, 1);
+                test.equals(vForm.value('foo'), 'hello');
+                test.equals(vForm.value('bar'), '');
+            }).lastly(test.done);
+    },
     Form_validate_empty_body_using_promise: function (test) {
         var form = Form({
             fields: [
@@ -13,7 +32,8 @@ module.exports = {
         });
         form.validate()
             .then(function () { test.ok(false); })
-            .catch(function (vForm) {
+            .catch(Form.ValidationError, function (err) {
+                var vForm = err.form;
                 test.equals(vForm.isValid(), false);
                 test.equals(vForm.errors('foo')[0], Errors._required);
                 test.equals(vForm.errors('bar')[0], Errors._required);
@@ -33,7 +53,7 @@ module.exports = {
                 test.equals(vForm.errors('bar').length, 0);
                 test.equals(vForm.value('foo'), 'hello');
                 test.equals(vForm.value('bar'), 'world');
-            }, function () {
+            }).catch(Form.ValidationError, function () {
                 test.ok(false);
             }).lastly(test.done);
     },
@@ -51,7 +71,7 @@ module.exports = {
                 test.equals(vForm.errors('bar').length, 0);
                 test.equals(vForm.value('foo'), 'hello@world.com');
                 test.equals(vForm.value('bar'), 'world');
-            }, function () {
+            }).catch(Form.ValidationError, function () {
                 test.ok(false);
             }).lastly(test.done);
     },
@@ -65,7 +85,8 @@ module.exports = {
         form.validate({ foo: 'worldx', 'bar': 'world' })
             .then(function () {
                 test.ok(false);
-            }, function (vForm) {
+            }).catch(Form.ValidationError, function (err) {
+                var vForm = err.form;
                 test.equals(vForm.isValid(), false);
                 test.equals(vForm.errors('foo')[0], Errors.equals);
                 test.equals(vForm.errors('bar').length, 0);
@@ -87,7 +108,7 @@ module.exports = {
                 test.equals(vForm.errors('bar').length, 0);
                 test.equals(vForm.value('foo'), 'world');
                 test.equals(vForm.value('bar'), 'world');
-            }, function () {
+            }).catch(Form.ValidationError, function () {
                 test.ok(false);
             }).lastly(test.done);
     },
@@ -105,7 +126,7 @@ module.exports = {
                 test.equals(vForm.errors('bar').length, 0);
                 test.equals(vForm.value('foo'), 'world');
                 test.equals(vForm.value('bar'), 'world');
-            }, function () {
+            }).catch(Form.ValidationError, function () {
                 test.ok(false);
             }).lastly(test.done);
     },
@@ -124,7 +145,7 @@ module.exports = {
                 test.equals(vForm.errors('bar').length, 0);
                 test.equals(vForm.value('foo'), 'hello');
                 test.equals(vForm.value('bar'), 'hello');
-            }, function () {
+            }).catch(Form.ValidationError, function () {
                 test.ok(false);
             }).lastly(test.done);
     },
@@ -143,7 +164,7 @@ module.exports = {
                 test.equals(vForm.errors('bar').length, 0);
                 test.equals(vForm.value('foo'), 'hello');
                 test.equals(vForm.value('bar'), 'hello');
-            }, function () {
+            }).catch(Form.ValidationError, function () {
                 test.ok(false);
             }).lastly(test.done);
     },
@@ -158,7 +179,8 @@ module.exports = {
         form.validate({ foo: 'hello', bar: 'hello', boo: 'hello' })
             .then(function () {
                 test.ok(false);
-            }, function (vForm) {
+            }).catch(Form.ValidationError, function (err) {
+                var vForm = err.form;
                 test.equals(vForm.isValid(), false);
                 test.equals(vForm.errors('foo').length, 0);
                 test.equals(vForm.errors('bar').length, 0);
@@ -178,7 +200,8 @@ module.exports = {
         form.validate({ foo: 'hello', bar: 'hello', boo: 'hello' })
             .then(function () {
                 test.ok(false);
-            }, function (vForm) {
+            }).catch(Form.ValidationError, function (err) {
+                var vForm = err.form;
                 test.equals(vForm.isValid(), false);
                 test.equals(vForm.globalErrors()[0], Errors._unknownField);
                 test.equals(vForm.errors('foo').length, 0);
@@ -205,7 +228,7 @@ module.exports = {
                 test.equals(vForm.errors('bar').length, 0);
                 test.equals(vForm.value('foo'), '42');
                 test.equals(vForm.value('bar'), '42');
-            }, function () {
+            }).catch(Form.ValidationError, function () {
                 test.ok(false);
             }).lastly(test.done);
     },
@@ -223,7 +246,8 @@ module.exports = {
         form.validate({ foo: ' 43      ', 'bar': '43' })
             .then(function () {
                 test.ok(false);
-            }, function (vForm) {
+            }).catch(Form.ValidationError, function (err) {
+                var vForm = err.form;
                 test.equals(vForm.isValid(), false);
                 test.equals(vForm.errors('foo').length, 0);
                 test.equals(vForm.errors('bar'), Errors.is42);
@@ -249,7 +273,7 @@ module.exports = {
                 test.equals(vForm.errors('bar').length, 0);
                 test.equals(vForm.value('foo'), '42');
                 test.equals(vForm.value('bar'), '42');
-            }, function () {
+            }).catch(Form.ValidationError, function () {
                 test.ok(false);
             }).lastly(test.done);
     },
@@ -267,7 +291,8 @@ module.exports = {
         form.validate({ foo: ' 69      ', 'bar': '69' })
             .then(function () {
                 test.ok(false);
-            }, function (vForm) {
+            }).catch(Form.ValidationError, function (err) {
+                var vForm = err.form;
                 test.equals(vForm.isValid(), false);
                 test.equals(vForm.errors('foo').length, 0);
                 test.equals(vForm.errors('bar'), Errors.startsWith);
@@ -289,7 +314,7 @@ module.exports = {
                 test.equals(vForm.errors('bar').length, 0);
                 test.equals(vForm.value('foo'), 'hello@world.com');
                 test.equals(vForm.value('bar'), 'world');
-            }, function () {
+            }).catch(Form.ValidationError, function () {
                 test.ok(false);
             }).lastly(test.done);
     },
@@ -303,7 +328,8 @@ module.exports = {
         form.validate({ foo: 'hello%world.com', 'bar': 'world' })
             .then(function () {
                 test.ok(false);
-            }, function (vForm) {
+            }).catch(Form.ValidationError, function (err) {
+                var vForm = err.form;
                 test.equals(vForm.isValid(), false);
                 test.equals(vForm.errors('foo')[0], Errors.isEmail);
                 test.equals(vForm.errors('bar').length, 0);

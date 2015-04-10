@@ -143,7 +143,8 @@ If you don't provide a callback to validate functions, it returns a promise:
 myForm.validate(data)
     .then(function (form) {
         console.log('This form is valid!');
-    }, function (form) {
+    }).catch(Form.ValidationError, function (err) {
+        var form = err.form;
         console.log('This form is not valid and contains some validation errors.');
     });
 ```

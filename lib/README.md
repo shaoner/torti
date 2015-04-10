@@ -675,6 +675,8 @@ Form email field
     * [.render([refresh])](#Form#render) ⇒ <code>Object.&lt;string, \*&gt;</code>
     * [.renderWith(values)](#Form#renderWith) ⇒ <code>Object.&lt;string, \*&gt;</code>
   * _static_
+    * [.ValidationError](#Form.ValidationError) ⇐ <code>Error</code>
+      * [new Form.ValidationError(form)](#new_Form.ValidationError_new)
     * [.validators](#Form.validators) : <code>Object.&lt;string, ?string&gt;</code>
     * [.addValidator(name, fn, error)](#Form.addValidator)
 
@@ -825,6 +827,19 @@ Get the associated form object populated with values
 | Param | Type | Description |
 | --- | --- | --- |
 | values | <code>Object.&lt;string, \*&gt;</code> | Values in the form of { fieldName: fieldValue } |
+
+<a name="Form.ValidationError"></a>
+### Form.ValidationError ⇐ <code>Error</code>
+**Extends:** <code>Error</code>  
+**Kind**: static class of <code>[Form](#Form)</code>  
+<a name="new_Form.ValidationError_new"></a>
+#### new Form.ValidationError(form)
+Validation Exception
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| form | <code>[Form](#Form)</code> | the invalid form |
 
 <a name="Form.validators"></a>
 ### Form.validators : <code>Object.&lt;string, ?string&gt;</code>
