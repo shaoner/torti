@@ -489,7 +489,7 @@ Remove characters that appear in the blacklist
 
 <a name="Field#normalizeEmail"></a>
 ### field.normalizeEmail([options]) ⇒ <code>[Field](#Field)</code>
-Convert the field value to a string
+Canonicalize an email address
 With lowercase set to true, the local part of the email address is lowercased for all domains; the hostname is always lowercased and the local part of the email address is always lowercased for hosts that are known to be case-insensitive (currently only GMail). Normalization follows special rules for known providers: currently, GMail addresses have dots removed in the local part and are stripped of tags (e.g. some.one+tag@gmail.com becomes someone@gmail.com) and all @googlemail.com addresses are normalized to @gmail.com.
 
 **Kind**: instance method of <code>[Field](#Field)</code>  
