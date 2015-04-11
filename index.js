@@ -1,3 +1,5 @@
+'use strict';
+
 var Form = require('./lib/form');
 var Field = require('./lib/field');
 var Errors = require('./lib/errors');

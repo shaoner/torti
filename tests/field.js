@@ -1,3 +1,5 @@
+'use strict';
+
 var Form = require('../index');
 var Field = Form.Field;
 var EmailField = Form.EmailField;
@@ -40,7 +42,7 @@ module.exports = {
     },
     Field_random_name: function (test) {
         var f = Field();
-        test.ok(f._name.match('name_') != null);
+        test.ok(f._name.match('name_') !== null);
         test.done();
     },
     Field_clone: function (test) {

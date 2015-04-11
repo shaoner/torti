@@ -1,3 +1,5 @@
+'use strict';
+
 var Form = require('../index');
 var Field = Form.Field;
 var EmailField = Form.EmailField;
@@ -215,7 +217,7 @@ module.exports = {
     },
     Form_add_simple_validator: function (test) {
         Form.addValidator('is42', function (done, v) {
-            done(v == 42);
+            done(v === '42');
         }, 'error42');
 
         var form = Form({
@@ -235,7 +237,7 @@ module.exports = {
     },
     Form_add_simple_validator_2: function (test) {
         Form.addValidator('is42', function (done, v) {
-            done(v == 42);
+            done(v === '42');
         }, 'error42');
 
         var form = Form({
@@ -255,7 +257,7 @@ module.exports = {
     },
     Form_add_validator_with_params: function (test) {
         Form.addValidator('startsWith', function (done, v, s) {
-            done(v[0] == s);
+            done(v[0] === s);
         }, 'errorStartsWith');
 
         var form = Form({
@@ -275,7 +277,7 @@ module.exports = {
     },
     Form_add_validator_with_params_2: function (test) {
         Form.addValidator('startsWith', function (done, v, s) {
-            done(v[0] == s);
+            done(v[0] === s);
         }, 'errorStartsWith');
 
         var form = Form({

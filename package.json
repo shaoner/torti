@@ -4,7 +4,7 @@
   "description": "Form generator and validator",
   "main": "index.js",
   "scripts": {
-    "test": "./run-tests.js"
+    "test": "./node_modules/jshint/bin/jshint index.js lib tests && ./run-tests.js"
   },
   "repository": {
     "type": "git",
@@ -27,6 +27,7 @@
     "bluebird": "~2.9.24"
   },
   "devDependencies": {
-    "nodeunit": "~0.9.1"
+    "nodeunit": "~0.9.1",
+    "jshint": "~2.6.3"
   }
 }
