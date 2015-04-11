@@ -53,8 +53,6 @@
   * [.isUppercase()](#Field#isUppercase) ⇒ <code>[Field](#Field)</code>
   * [.isInt()](#Field#isInt) ⇒ <code>[Field](#Field)</code>
   * [.isFloat()](#Field#isFloat) ⇒ <code>[Field](#Field)</code>
-  * [.isDivisibleBy(num)](#Field#isDivisibleBy) ⇒ <code>[Field](#Field)</code>
-  * [.isNull()](#Field#isNull) ⇒ <code>[Field](#Field)</code>
   * [.isLength(min, [max])](#Field#isLength) ⇒ <code>[Field](#Field)</code>
   * [.isByteLength(min, [max])](#Field#isByteLength) ⇒ <code>[Field](#Field)</code>
   * [.isUUID([version])](#Field#isUUID) ⇒ <code>[Field](#Field)</code>
@@ -66,12 +64,7 @@
   * [.isISBN([version])](#Field#isISBN) ⇒ <code>[Field](#Field)</code>
   * [.isMobilePhone(local)](#Field#isMobilePhone) ⇒ <code>[Field](#Field)</code>
   * [.isJSON()](#Field#isJSON) ⇒ <code>[Field](#Field)</code>
-  * [.isMultibyte()](#Field#isMultibyte) ⇒ <code>[Field](#Field)</code>
   * [.isAscii()](#Field#isAscii) ⇒ <code>[Field](#Field)</code>
-  * [.isFullWidth()](#Field#isFullWidth) ⇒ <code>[Field](#Field)</code>
-  * [.isHalfWidth()](#Field#isHalfWidth) ⇒ <code>[Field](#Field)</code>
-  * [.isVariableWidth()](#Field#isVariableWidth) ⇒ <code>[Field](#Field)</code>
-  * [.isSurrogatePair()](#Field#isSurrogatePair) ⇒ <code>[Field](#Field)</code>
   * [.isMongoId()](#Field#isMongoId) ⇒ <code>[Field](#Field)</code>
   * [.isCurrency([options])](#Field#isCurrency) ⇒ <code>[Field](#Field)</code>
   * [.toString()](#Field#toString) ⇒ <code>[Field](#Field)</code>
@@ -282,21 +275,6 @@ Check if the field value is an integer
 Check if the field value is a float
 
 **Kind**: instance method of <code>[Field](#Field)</code>  
-<a name="Field#isDivisibleBy"></a>
-### field.isDivisibleBy(num) ⇒ <code>[Field](#Field)</code>
-Check if the field value is divisible by number
-
-**Kind**: instance method of <code>[Field](#Field)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| num | <code>Number</code> | The denominator |
-
-<a name="Field#isNull"></a>
-### field.isNull() ⇒ <code>[Field](#Field)</code>
-Check if the field value is a null string
-
-**Kind**: instance method of <code>[Field](#Field)</code>  
 <a name="Field#isLength"></a>
 ### field.isLength(min, [max]) ⇒ <code>[Field](#Field)</code>
 Check if the field value's length falls in a range. Note: this function takes into account surrogate pairs.
@@ -394,34 +372,9 @@ Check if the field value is a mobile phone number
 Check if the field value is valid JSON
 
 **Kind**: instance method of <code>[Field](#Field)</code>  
-<a name="Field#isMultibyte"></a>
-### field.isMultibyte() ⇒ <code>[Field](#Field)</code>
-Check if the field value contains one or more multibyte chars
-
-**Kind**: instance method of <code>[Field](#Field)</code>  
 <a name="Field#isAscii"></a>
 ### field.isAscii() ⇒ <code>[Field](#Field)</code>
 Check if the field value contains only ASCII chars
-
-**Kind**: instance method of <code>[Field](#Field)</code>  
-<a name="Field#isFullWidth"></a>
-### field.isFullWidth() ⇒ <code>[Field](#Field)</code>
-Check if the field value contains any full-width chars
-
-**Kind**: instance method of <code>[Field](#Field)</code>  
-<a name="Field#isHalfWidth"></a>
-### field.isHalfWidth() ⇒ <code>[Field](#Field)</code>
-Check if the field value contains any half-width chars
-
-**Kind**: instance method of <code>[Field](#Field)</code>  
-<a name="Field#isVariableWidth"></a>
-### field.isVariableWidth() ⇒ <code>[Field](#Field)</code>
-Check if the field value contains a mixture of full and half-width chars
-
-**Kind**: instance method of <code>[Field](#Field)</code>  
-<a name="Field#isSurrogatePair"></a>
-### field.isSurrogatePair() ⇒ <code>[Field](#Field)</code>
-Check if the field value contains any surrogate pairs chars
 
 **Kind**: instance method of <code>[Field](#Field)</code>  
 <a name="Field#isMongoId"></a>
@@ -604,8 +557,6 @@ Convert the field value to uppercase
   * [.isUppercase()](#Field#isUppercase) ⇒ <code>[Field](#Field)</code>
   * [.isInt()](#Field#isInt) ⇒ <code>[Field](#Field)</code>
   * [.isFloat()](#Field#isFloat) ⇒ <code>[Field](#Field)</code>
-  * [.isDivisibleBy(num)](#Field#isDivisibleBy) ⇒ <code>[Field](#Field)</code>
-  * [.isNull()](#Field#isNull) ⇒ <code>[Field](#Field)</code>
   * [.isLength(min, [max])](#Field#isLength) ⇒ <code>[Field](#Field)</code>
   * [.isByteLength(min, [max])](#Field#isByteLength) ⇒ <code>[Field](#Field)</code>
   * [.isUUID([version])](#Field#isUUID) ⇒ <code>[Field](#Field)</code>
@@ -617,12 +568,7 @@ Convert the field value to uppercase
   * [.isISBN([version])](#Field#isISBN) ⇒ <code>[Field](#Field)</code>
   * [.isMobilePhone(local)](#Field#isMobilePhone) ⇒ <code>[Field](#Field)</code>
   * [.isJSON()](#Field#isJSON) ⇒ <code>[Field](#Field)</code>
-  * [.isMultibyte()](#Field#isMultibyte) ⇒ <code>[Field](#Field)</code>
   * [.isAscii()](#Field#isAscii) ⇒ <code>[Field](#Field)</code>
-  * [.isFullWidth()](#Field#isFullWidth) ⇒ <code>[Field](#Field)</code>
-  * [.isHalfWidth()](#Field#isHalfWidth) ⇒ <code>[Field](#Field)</code>
-  * [.isVariableWidth()](#Field#isVariableWidth) ⇒ <code>[Field](#Field)</code>
-  * [.isSurrogatePair()](#Field#isSurrogatePair) ⇒ <code>[Field](#Field)</code>
   * [.isMongoId()](#Field#isMongoId) ⇒ <code>[Field](#Field)</code>
   * [.isCurrency([options])](#Field#isCurrency) ⇒ <code>[Field](#Field)</code>
   * [.toString()](#Field#toString) ⇒ <code>[Field](#Field)</code>
