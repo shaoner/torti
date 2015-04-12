@@ -4,6 +4,7 @@ var Form = require('../index');
 var Field = Form.Field;
 var EmailField = Form.EmailField;
 var Errors = Form.Errors;
+var format = require('util').format;
 
 module.exports = {
     Form_empty: function (test) {
@@ -106,7 +107,7 @@ module.exports = {
         });
         form.validate({ foo: 'worldx', 'bar': 'world' }, function (vForm) {
             test.equals(vForm.isValid(), false);
-            test.equals(vForm.errors('foo')[0], Errors.equals);
+            test.equals(vForm.errors('foo')[0], Errors.equals('bar'));
             test.equals(vForm.errors('bar').length, 0);
             test.equals(vForm.value('foo'), 'worldx');
             test.equals(vForm.value('bar'), 'world');
@@ -290,6 +291,27 @@ module.exports = {
             test.equals(vForm.isValid(), false);
             test.equals(vForm.errors('foo').length, 0);
             test.equals(vForm.errors('bar'), Errors.startsWith);
+            test.equals(vForm.value('foo'), '69');
+            test.equals(vForm.value('bar'), '69');
+            test.done();
+        });
+    },
+    Form_add_validator_with_params_and_error_function: function (test) {
+        Form.addValidator('startsWith', function (done, v, s) {
+            done(v[0] === s);
+        }, function (v) {
+            return format('This should start with %s', v);
+        });
+        var form = Form({
+            fields: [
+                Field({ name: 'foo' }).trim().equals(Field('bar')),
+                Field({ name: 'bar' }).startsWith('4')
+            ]
+        });
+        form.validate({ foo: ' 69      ', 'bar': '69' }, function (vForm) {
+            test.equals(vForm.isValid(), false);
+            test.equals(vForm.errors('foo').length, 0);
+            test.equals(vForm.errors('bar'), Errors.startsWith('4'));
             test.equals(vForm.value('foo'), '69');
             test.equals(vForm.value('bar'), '69');
             test.done();

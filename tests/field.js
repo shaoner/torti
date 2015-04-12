@@ -62,7 +62,7 @@ module.exports = {
         clone.setValue('bar');
         clone.validate(function (valid) {
             test.equals(valid, false);
-            test.equals(this.errors()[0], Errors.isLength);
+            test.equals(this.errors()[0], Errors.isLength(5, 20));
             clone.setValue('barjo');
             clone.validate(function (valid) {
                 test.equals(valid, false);

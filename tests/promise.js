@@ -90,7 +90,7 @@ module.exports = {
             }).catch(Form.ValidationError, function (err) {
                 var vForm = err.form;
                 test.equals(vForm.isValid(), false);
-                test.equals(vForm.errors('foo')[0], Errors.equals);
+                test.equals(vForm.errors('foo')[0], Errors.equals('bar'));
                 test.equals(vForm.errors('bar').length, 0);
                 test.equals(vForm.value('foo'), 'worldx');
                 test.equals(vForm.value('bar'), 'world');
