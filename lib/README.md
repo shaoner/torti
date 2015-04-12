@@ -1,10 +1,5 @@
 # API
 
-## Modules
-<dl>
-<dt><a href="#module_FieldValidators">FieldValidators</a></dt>
-<dd></dd>
-</dl>
 ## Classes
 <dl>
 <dt><a href="#Field">Field</a></dt>
@@ -13,24 +8,34 @@
 <dd></dd>
 <dt><a href="#Form">Form</a></dt>
 <dd></dd>
-<dt><a href="#FormRenderer">FormRenderer</a></dt>
+</dl>
+## Members
+<dl>
+<dt><a href="#Errors">Errors</a> : <code>string</code> | <code>function</code></dt>
+<dd></dd>
+<dt><a href="#FieldValidators">FieldValidators</a> : <code><a href="#validateCallback">validateCallback</a></code></dt>
 <dd></dd>
 </dl>
 ## Typedefs
 <dl>
+<dt><a href="#notifyResult">notifyResult</a> : <code>function</code></dt>
+<dd></dd>
 <dt><a href="#validateCallback">validateCallback</a> ⇒ <code>Boolean</code> | <code>string</code></dt>
 <dd></dd>
 </dl>
-<a name="module_FieldValidators"></a>
-## FieldValidators
 <a name="Field"></a>
 ## Field
 **Kind**: global class  
 
 * [Field](#Field)
   * [new Field(options)](#new_Field_new)
+  * [.clone()](#Field#clone) ⇒ <code>[Field](#Field)</code>
+  * [.value()](#Field#value)
+  * [.setValue(value)](#Field#setValue)
+  * [.errors()](#Field#errors) ⇒ <code>string</code>
+  * [.addError(error)](#Field#addError)
   * [.optional()](#Field#optional) ⇒ <code>[Field](#Field)</code>
-  * [.validate(value, body)](#Field#validate)
+  * [.validate([body], [done])](#Field#validate) ⇒ <code>Promise</code> \| <code>undefined</code>
   * [.equals(comparison)](#Field#equals) ⇒ <code>[Field](#Field)</code>
   * [.contains(seed)](#Field#contains) ⇒ <code>[Field](#Field)</code>
   * [.matches(pattern, [modifier])](#Field#matches) ⇒ <code>[Field](#Field)</code>
@@ -48,8 +53,6 @@
   * [.isUppercase()](#Field#isUppercase) ⇒ <code>[Field](#Field)</code>
   * [.isInt()](#Field#isInt) ⇒ <code>[Field](#Field)</code>
   * [.isFloat()](#Field#isFloat) ⇒ <code>[Field](#Field)</code>
-  * [.isDivisibleBy(num)](#Field#isDivisibleBy) ⇒ <code>[Field](#Field)</code>
-  * [.isNull()](#Field#isNull) ⇒ <code>[Field](#Field)</code>
   * [.isLength(min, [max])](#Field#isLength) ⇒ <code>[Field](#Field)</code>
   * [.isByteLength(min, [max])](#Field#isByteLength) ⇒ <code>[Field](#Field)</code>
   * [.isUUID([version])](#Field#isUUID) ⇒ <code>[Field](#Field)</code>
@@ -61,12 +64,7 @@
   * [.isISBN([version])](#Field#isISBN) ⇒ <code>[Field](#Field)</code>
   * [.isMobilePhone(local)](#Field#isMobilePhone) ⇒ <code>[Field](#Field)</code>
   * [.isJSON()](#Field#isJSON) ⇒ <code>[Field](#Field)</code>
-  * [.isMultibyte()](#Field#isMultibyte) ⇒ <code>[Field](#Field)</code>
   * [.isAscii()](#Field#isAscii) ⇒ <code>[Field](#Field)</code>
-  * [.isFullWidth()](#Field#isFullWidth) ⇒ <code>[Field](#Field)</code>
-  * [.isHalfWidth()](#Field#isHalfWidth) ⇒ <code>[Field](#Field)</code>
-  * [.isVariableWidth()](#Field#isVariableWidth) ⇒ <code>[Field](#Field)</code>
-  * [.isSurrogatePair()](#Field#isSurrogatePair) ⇒ <code>[Field](#Field)</code>
   * [.isMongoId()](#Field#isMongoId) ⇒ <code>[Field](#Field)</code>
   * [.isCurrency([options])](#Field#isCurrency) ⇒ <code>[Field](#Field)</code>
   * [.toString()](#Field#toString) ⇒ <code>[Field](#Field)</code>
@@ -82,6 +80,10 @@
   * [.whitelist(chars)](#Field#whitelist) ⇒ <code>[Field](#Field)</code>
   * [.blacklist(chars)](#Field#blacklist) ⇒ <code>[Field](#Field)</code>
   * [.normalizeEmail([options])](#Field#normalizeEmail) ⇒ <code>[Field](#Field)</code>
+  * [.capitalize()](#Field#capitalize) ⇒ <code>[Field](#Field)</code>
+  * [.trunc([options])](#Field#trunc) ⇒ <code>[Field](#Field)</code>
+  * [.lower()](#Field#lower) ⇒ <code>[Field](#Field)</code>
+  * [.upper()](#Field#upper) ⇒ <code>[Field](#Field)</code>
 
 <a name="new_Field_new"></a>
 ### new Field(options)
@@ -92,23 +94,65 @@ Form field
 | --- | --- | --- |
 | options | <code>Object</code> \| <code>string</code> | Options or fieldname |
 
+<a name="Field#clone"></a>
+### field.clone() ⇒ <code>[Field](#Field)</code>
+Clone the current field
+
+**Kind**: instance method of <code>[Field](#Field)</code>  
+**Returns**: <code>[Field](#Field)</code> - - The new field  
+<a name="Field#value"></a>
+### field.value()
+Retrieve the field value
+
+**Kind**: instance method of <code>[Field](#Field)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+|  | <code>\*</code> | The field value |
+
+<a name="Field#setValue"></a>
+### field.setValue(value)
+Set the field value
+
+**Kind**: instance method of <code>[Field](#Field)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| value | <code>\*</code> | The value |
+
+<a name="Field#errors"></a>
+### field.errors() ⇒ <code>string</code>
+Get the field errors
+
+**Kind**: instance method of <code>[Field](#Field)</code>  
+**Returns**: <code>string</code> - - The field error  
+<a name="Field#addError"></a>
+### field.addError(error)
+Add a field error
+
+**Kind**: instance method of <code>[Field](#Field)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| error | <code>string</code> | The error |
+
 <a name="Field#optional"></a>
 ### field.optional() ⇒ <code>[Field](#Field)</code>
 Set the field as optional
 
 **Kind**: instance method of <code>[Field](#Field)</code>  
-**Access:** public  
 <a name="Field#validate"></a>
-### field.validate(value, body)
+### field.validate([body], [done]) ⇒ <code>Promise</code> \| <code>undefined</code>
 Validate a field
+If no callback is given, it returns a Promise
 
 **Kind**: instance method of <code>[Field](#Field)</code>  
-**Access:** public  
+**Returns**: <code>Promise</code> \| <code>undefined</code> - - A new promise or undefined  
 
-| Param | Type | Description |
-| --- | --- | --- |
-| value | <code>string</code> | The value to validate |
-| body | <code>Object.&lt;string, string&gt;</code> | All form values |
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [body] | <code>Object.&lt;string, string&gt;</code> | <code>{}</code> | All form values |
+| [done] | <code>function</code> |  | Callback giving the validation result |
 
 <a name="Field#equals"></a>
 ### field.equals(comparison) ⇒ <code>[Field](#Field)</code>
@@ -231,21 +275,6 @@ Check if the field value is an integer
 Check if the field value is a float
 
 **Kind**: instance method of <code>[Field](#Field)</code>  
-<a name="Field#isDivisibleBy"></a>
-### field.isDivisibleBy(num) ⇒ <code>[Field](#Field)</code>
-Check if the field value is divisible by number
-
-**Kind**: instance method of <code>[Field](#Field)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| num | <code>Number</code> | The denominator |
-
-<a name="Field#isNull"></a>
-### field.isNull() ⇒ <code>[Field](#Field)</code>
-Check if the field value is a null string
-
-**Kind**: instance method of <code>[Field](#Field)</code>  
 <a name="Field#isLength"></a>
 ### field.isLength(min, [max]) ⇒ <code>[Field](#Field)</code>
 Check if the field value's length falls in a range. Note: this function takes into account surrogate pairs.
@@ -343,34 +372,9 @@ Check if the field value is a mobile phone number
 Check if the field value is valid JSON
 
 **Kind**: instance method of <code>[Field](#Field)</code>  
-<a name="Field#isMultibyte"></a>
-### field.isMultibyte() ⇒ <code>[Field](#Field)</code>
-Check if the field value contains one or more multibyte chars
-
-**Kind**: instance method of <code>[Field](#Field)</code>  
 <a name="Field#isAscii"></a>
 ### field.isAscii() ⇒ <code>[Field](#Field)</code>
 Check if the field value contains only ASCII chars
-
-**Kind**: instance method of <code>[Field](#Field)</code>  
-<a name="Field#isFullWidth"></a>
-### field.isFullWidth() ⇒ <code>[Field](#Field)</code>
-Check if the field value contains any full-width chars
-
-**Kind**: instance method of <code>[Field](#Field)</code>  
-<a name="Field#isHalfWidth"></a>
-### field.isHalfWidth() ⇒ <code>[Field](#Field)</code>
-Check if the field value contains any half-width chars
-
-**Kind**: instance method of <code>[Field](#Field)</code>  
-<a name="Field#isVariableWidth"></a>
-### field.isVariableWidth() ⇒ <code>[Field](#Field)</code>
-Check if the field value contains a mixture of full and half-width chars
-
-**Kind**: instance method of <code>[Field](#Field)</code>  
-<a name="Field#isSurrogatePair"></a>
-### field.isSurrogatePair() ⇒ <code>[Field](#Field)</code>
-Check if the field value contains any surrogate pairs chars
 
 **Kind**: instance method of <code>[Field](#Field)</code>  
 <a name="Field#isMongoId"></a>
@@ -485,7 +489,7 @@ Remove characters that appear in the blacklist
 
 <a name="Field#normalizeEmail"></a>
 ### field.normalizeEmail([options]) ⇒ <code>[Field](#Field)</code>
-Convert the field value to a string
+Canonicalize an email address
 With lowercase set to true, the local part of the email address is lowercased for all domains; the hostname is always lowercased and the local part of the email address is always lowercased for hosts that are known to be case-insensitive (currently only GMail). Normalization follows special rules for known providers: currently, GMail addresses have dots removed in the local part and are stripped of tags (e.g. some.one+tag@gmail.com becomes someone@gmail.com) and all @googlemail.com addresses are normalized to @gmail.com.
 
 **Kind**: instance method of <code>[Field](#Field)</code>  
@@ -494,6 +498,34 @@ With lowercase set to true, the local part of the email address is lowercased fo
 | --- | --- | --- | --- |
 | [options] | <code>Object</code> | <code>{ lowercase: true }</code> | Options |
 
+<a name="Field#capitalize"></a>
+### field.capitalize() ⇒ <code>[Field](#Field)</code>
+Capitalize the field value
+
+**Kind**: instance method of <code>[Field](#Field)</code>  
+<a name="Field#trunc"></a>
+### field.trunc([options]) ⇒ <code>[Field](#Field)</code>
+Truncate the field value
+
+**Kind**: instance method of <code>[Field](#Field)</code>  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [options] | <code>Object</code> \| <code>Number</code> |  | Options or the maximum value length |
+| [options.length] | <code>Number</code> | <code>30</code> | The maximum value length |
+| [options.omission] | <code>string</code> | <code>&quot;&#x27;...&#x27;&quot;</code> | The string to indicate text is omitted |
+| [options.separator] | <code>RegExp</code> \| <code>string</code> |  | The separator pattern to truncate to |
+
+<a name="Field#lower"></a>
+### field.lower() ⇒ <code>[Field](#Field)</code>
+Convert the field value to lowercase
+
+**Kind**: instance method of <code>[Field](#Field)</code>  
+<a name="Field#upper"></a>
+### field.upper() ⇒ <code>[Field](#Field)</code>
+Convert the field value to uppercase
+
+**Kind**: instance method of <code>[Field](#Field)</code>  
 <a name="EmailField"></a>
 ## EmailField ⇐ <code>[Field](#Field)</code>
 **Extends:** <code>[Field](#Field)</code>  
@@ -501,8 +533,13 @@ With lowercase set to true, the local part of the email address is lowercased fo
 
 * [EmailField](#EmailField) ⇐ <code>[Field](#Field)</code>
   * [new EmailField(options)](#new_EmailField_new)
+  * [.clone()](#Field#clone) ⇒ <code>[Field](#Field)</code>
+  * [.value()](#Field#value)
+  * [.setValue(value)](#Field#setValue)
+  * [.errors()](#Field#errors) ⇒ <code>string</code>
+  * [.addError(error)](#Field#addError)
   * [.optional()](#Field#optional) ⇒ <code>[Field](#Field)</code>
-  * [.validate(value, body)](#Field#validate)
+  * [.validate([body], [done])](#Field#validate) ⇒ <code>Promise</code> \| <code>undefined</code>
   * [.equals(comparison)](#Field#equals) ⇒ <code>[Field](#Field)</code>
   * [.contains(seed)](#Field#contains) ⇒ <code>[Field](#Field)</code>
   * [.matches(pattern, [modifier])](#Field#matches) ⇒ <code>[Field](#Field)</code>
@@ -520,8 +557,6 @@ With lowercase set to true, the local part of the email address is lowercased fo
   * [.isUppercase()](#Field#isUppercase) ⇒ <code>[Field](#Field)</code>
   * [.isInt()](#Field#isInt) ⇒ <code>[Field](#Field)</code>
   * [.isFloat()](#Field#isFloat) ⇒ <code>[Field](#Field)</code>
-  * [.isDivisibleBy(num)](#Field#isDivisibleBy) ⇒ <code>[Field](#Field)</code>
-  * [.isNull()](#Field#isNull) ⇒ <code>[Field](#Field)</code>
   * [.isLength(min, [max])](#Field#isLength) ⇒ <code>[Field](#Field)</code>
   * [.isByteLength(min, [max])](#Field#isByteLength) ⇒ <code>[Field](#Field)</code>
   * [.isUUID([version])](#Field#isUUID) ⇒ <code>[Field](#Field)</code>
@@ -533,12 +568,7 @@ With lowercase set to true, the local part of the email address is lowercased fo
   * [.isISBN([version])](#Field#isISBN) ⇒ <code>[Field](#Field)</code>
   * [.isMobilePhone(local)](#Field#isMobilePhone) ⇒ <code>[Field](#Field)</code>
   * [.isJSON()](#Field#isJSON) ⇒ <code>[Field](#Field)</code>
-  * [.isMultibyte()](#Field#isMultibyte) ⇒ <code>[Field](#Field)</code>
   * [.isAscii()](#Field#isAscii) ⇒ <code>[Field](#Field)</code>
-  * [.isFullWidth()](#Field#isFullWidth) ⇒ <code>[Field](#Field)</code>
-  * [.isHalfWidth()](#Field#isHalfWidth) ⇒ <code>[Field](#Field)</code>
-  * [.isVariableWidth()](#Field#isVariableWidth) ⇒ <code>[Field](#Field)</code>
-  * [.isSurrogatePair()](#Field#isSurrogatePair) ⇒ <code>[Field](#Field)</code>
   * [.isMongoId()](#Field#isMongoId) ⇒ <code>[Field](#Field)</code>
   * [.isCurrency([options])](#Field#isCurrency) ⇒ <code>[Field](#Field)</code>
   * [.toString()](#Field#toString) ⇒ <code>[Field](#Field)</code>
@@ -554,6 +584,10 @@ With lowercase set to true, the local part of the email address is lowercased fo
   * [.whitelist(chars)](#Field#whitelist) ⇒ <code>[Field](#Field)</code>
   * [.blacklist(chars)](#Field#blacklist) ⇒ <code>[Field](#Field)</code>
   * [.normalizeEmail([options])](#Field#normalizeEmail) ⇒ <code>[Field](#Field)</code>
+  * [.capitalize()](#Field#capitalize) ⇒ <code>[Field](#Field)</code>
+  * [.trunc([options])](#Field#trunc) ⇒ <code>[Field](#Field)</code>
+  * [.lower()](#Field#lower) ⇒ <code>[Field](#Field)</code>
+  * [.upper()](#Field#upper) ⇒ <code>[Field](#Field)</code>
 
 <a name="new_EmailField_new"></a>
 ### new EmailField(options)
@@ -569,54 +603,190 @@ Form email field
 **Kind**: global class  
 
 * [Form](#Form)
-  * [new Form(options, [Renderer])](#new_Form_new)
+  * [new Form(options)](#new_Form_new)
   * _instance_
+    * [.clone()](#Form#clone) ⇒ <code>[Form](#Form)</code>
+    * [.addField(field)](#Form#addField)
+    * [.setField(fieldName, key, value)](#Form#setField)
+    * [.setValue(fieldName, value)](#Form#setValue)
+    * [.value([fieldName])](#Form#value) ⇒ <code>string</code>
+    * [.addError(fieldName, error)](#Form#addError)
+    * [.errors([fieldName])](#Form#errors) ⇒ <code>Array.&lt;string&gt;</code> \| <code>Object.&lt;string, Array.&lt;string&gt;&gt;</code>
+    * [.addGlobalError(error)](#Form#addGlobalError)
+    * [.globalErrors()](#Form#globalErrors) ⇒ <code>Array.&lt;string&gt;</code>
+    * [.refresh()](#Form#refresh)
     * [.get(fieldName)](#Form#get) ⇒ <code>[Field](#Field)</code>
-    * [.validate(body, [stop])](#Form#validate) ⇒ <code>[FormRenderer](#FormRenderer)</code>
-    * [.render()](#Form#render) ⇒ <code>[FormRenderer](#FormRenderer)</code>
+    * [.isValid()](#Form#isValid) ⇒ <code>Boolean</code>
+    * [.validate([...body], [done])](#Form#validate) ⇒ <code>Promise</code> \| <code>undefined</code>
+    * [.render([refresh])](#Form#render) ⇒ <code>Object.&lt;string, \*&gt;</code>
+    * [.renderWith(values)](#Form#renderWith) ⇒ <code>Object.&lt;string, \*&gt;</code>
   * _static_
+    * [.ValidationError](#Form.ValidationError) ⇐ <code>Error</code>
+      * [new Form.ValidationError(form)](#new_Form.ValidationError_new)
     * [.validators](#Form.validators) : <code>Object.&lt;string, ?string&gt;</code>
     * [.addValidator(name, fn, error)](#Form.addValidator)
 
 <a name="new_Form_new"></a>
-### new Form(options, [Renderer])
+### new Form(options)
 Form
 
 
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| options | <code>Object</code> |  | Options |
-| [Renderer] | <code>[FormRenderer](#FormRenderer)</code> | <code>FormRenderer</code> | Form renderer class to use |
+| Param | Type | Description |
+| --- | --- | --- |
+| options | <code>Object</code> | Options |
 
+<a name="Form#clone"></a>
+### form.clone() ⇒ <code>[Form](#Form)</code>
+Clone the current form
+
+**Kind**: instance method of <code>[Form](#Form)</code>  
+**Returns**: <code>[Form](#Form)</code> - - the new form  
+<a name="Form#addField"></a>
+### form.addField(field)
+Add a new field
+
+**Kind**: instance method of <code>[Form](#Form)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| field | <code>[Field](#Field)</code> | A field instance |
+
+<a name="Form#setField"></a>
+### form.setField(fieldName, key, value)
+Set a field property
+
+**Kind**: instance method of <code>[Form](#Form)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| fieldName | <code>string</code> | A field name |
+| key | <code>string</code> | The property name to set |
+| value | <code>string</code> | The value to set |
+
+<a name="Form#setValue"></a>
+### form.setValue(fieldName, value)
+Set a field value
+
+**Kind**: instance method of <code>[Form](#Form)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| fieldName | <code>string</code> | A field name |
+| value | <code>string</code> | A value |
+
+<a name="Form#value"></a>
+### form.value([fieldName]) ⇒ <code>string</code>
+Retrieve a field value or each value as a map if fieldName is not provided
+
+**Kind**: instance method of <code>[Form](#Form)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [fieldName] | <code>string</code> | A field name |
+
+<a name="Form#addError"></a>
+### form.addError(fieldName, error)
+Add a field error
+
+**Kind**: instance method of <code>[Form](#Form)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| fieldName | <code>string</code> | A field name |
+| error | <code>string</code> | The error |
+
+<a name="Form#errors"></a>
+### form.errors([fieldName]) ⇒ <code>Array.&lt;string&gt;</code> \| <code>Object.&lt;string, Array.&lt;string&gt;&gt;</code>
+Retrieve a field error or all errors as a map if fieldName is not provided
+
+**Kind**: instance method of <code>[Form](#Form)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [fieldName] | <code>string</code> | A field name |
+
+<a name="Form#addGlobalError"></a>
+### form.addGlobalError(error)
+Add a non field specific error
+
+**Kind**: instance method of <code>[Form](#Form)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| error | <code>string</code> | The global error |
+
+<a name="Form#globalErrors"></a>
+### form.globalErrors() ⇒ <code>Array.&lt;string&gt;</code>
+Get non field specific errors
+
+**Kind**: instance method of <code>[Form](#Form)</code>  
+**Returns**: <code>Array.&lt;string&gt;</code> - - The global errors  
+<a name="Form#refresh"></a>
+### form.refresh()
+Reset the render object
+
+**Kind**: instance method of <code>[Form](#Form)</code>  
 <a name="Form#get"></a>
 ### form.get(fieldName) ⇒ <code>[Field](#Field)</code>
 Get a field from its name
 
 **Kind**: instance method of <code>[Form](#Form)</code>  
-**Access:** public  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | fieldName | <code>string</code> | The name of the field |
 
-<a name="Form#validate"></a>
-### form.validate(body, [stop]) ⇒ <code>[FormRenderer](#FormRenderer)</code>
-Validate a complete form and returns a form renderer
+<a name="Form#isValid"></a>
+### form.isValid() ⇒ <code>Boolean</code>
+Check if the form is valid
 
 **Kind**: instance method of <code>[Form](#Form)</code>  
-**Access:** public  
+<a name="Form#validate"></a>
+### form.validate([...body], [done]) ⇒ <code>Promise</code> \| <code>undefined</code>
+Validate a complete form and returns a new populated form
+If no callback is given, it returns a Promise
+
+**Kind**: instance method of <code>[Form](#Form)</code>  
+**Returns**: <code>Promise</code> \| <code>undefined</code> - - A new promise or undefined  
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| body | <code>Object.&lt;string, string&gt;</code> |  | Body matching the form |
-| [stop] | <code>Boolean</code> | <code>false</code> | Stop at first error |
+| [...body] | <code>Object.&lt;string, \*&gt;</code> | <code>{}</code> | Body matching the form |
+| [done] | <code>function</code> |  | Callback sending the new form |
 
 <a name="Form#render"></a>
-### form.render() ⇒ <code>[FormRenderer](#FormRenderer)</code>
-Get the default renderer for the form
+### form.render([refresh]) ⇒ <code>Object.&lt;string, \*&gt;</code>
+Get the associated form object
 
 **Kind**: instance method of <code>[Form](#Form)</code>  
-**Access:** public  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [refresh] | <code>Boolean</code> \| <code>Object.&lt;string, \*&gt;</code> | <code>false</code> | If true, the form object is rebuilt. It can also be an object in the form: {   fieldName1: { prop1: value1, prop2: value2 },   fieldName2: { prop3: value3, prop2: value2 } } |
+
+<a name="Form#renderWith"></a>
+### form.renderWith(values) ⇒ <code>Object.&lt;string, \*&gt;</code>
+Get the associated form object populated with values
+
+**Kind**: instance method of <code>[Form](#Form)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| values | <code>Object.&lt;string, \*&gt;</code> | Values in the form of { fieldName: fieldValue } |
+
+<a name="Form.ValidationError"></a>
+### Form.ValidationError ⇐ <code>Error</code>
+**Extends:** <code>Error</code>  
+**Kind**: static class of <code>[Form](#Form)</code>  
+<a name="new_Form.ValidationError_new"></a>
+#### new Form.ValidationError(form)
+Validation Exception
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| form | <code>[Form](#Form)</code> | the invalid form |
+
 <a name="Form.validators"></a>
 ### Form.validators : <code>Object.&lt;string, ?string&gt;</code>
 List of validators / error messages
@@ -627,97 +797,27 @@ List of validators / error messages
 Add a new validator
 
 **Kind**: static method of <code>[Form](#Form)</code>  
-**Access:** public  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | name | <code>string</code> | Name of the validator |
 | fn | <code>[validateCallback](#validateCallback)</code> | The validator callback |
-| error | <code>string</code> | The error message |
+| error | <code>string</code> \| <code>function</code> | The error message |
 
-<a name="FormRenderer"></a>
-## FormRenderer
-**Kind**: global class  
-
-* [FormRenderer](#FormRenderer)
-  * [new FormRenderer([options])](#new_FormRenderer_new)
-  * [.addField(field)](#FormRenderer#addField)
-  * [.setField(fieldName, key, value)](#FormRenderer#setField)
-  * [.setValue(fieldName, value)](#FormRenderer#setValue)
-  * [.value(fieldName)](#FormRenderer#value) ⇒ <code>string</code>
-  * [.addError([fieldName], error)](#FormRenderer#addError)
-  * [.errors([fieldName])](#FormRenderer#errors) ⇒ <code>Array.&lt;string&gt;</code>
-
-<a name="new_FormRenderer_new"></a>
-### new FormRenderer([options])
+<a name="Errors"></a>
+## Errors : <code>string</code> \| <code>function</code>
+**Kind**: global enum  
+<a name="FieldValidators"></a>
+## FieldValidators : <code>[validateCallback](#validateCallback)</code>
+**Kind**: global enum  
+<a name="notifyResult"></a>
+## notifyResult : <code>function</code>
+**Kind**: global typedef  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| [options] | <code>Object</code> | Options |
-
-<a name="FormRenderer#addField"></a>
-### formRenderer.addField(field)
-Add a new field
-
-**Kind**: instance method of <code>[FormRenderer](#FormRenderer)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| field | <code>[Field](#Field)</code> | A field instance |
-
-<a name="FormRenderer#setField"></a>
-### formRenderer.setField(fieldName, key, value)
-Set a field property
-
-**Kind**: instance method of <code>[FormRenderer](#FormRenderer)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| fieldName | <code>string</code> | A field name |
-| key | <code>string</code> | The property name to set |
-| value | <code>string</code> | The value to set |
-
-<a name="FormRenderer#setValue"></a>
-### formRenderer.setValue(fieldName, value)
-Set a field value
-
-**Kind**: instance method of <code>[FormRenderer](#FormRenderer)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| fieldName | <code>string</code> | A field name |
-| value | <code>string</code> | A value |
-
-<a name="FormRenderer#value"></a>
-### formRenderer.value(fieldName) ⇒ <code>string</code>
-Retrieve a field value
-
-**Kind**: instance method of <code>[FormRenderer](#FormRenderer)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| fieldName | <code>string</code> | A field name |
-
-<a name="FormRenderer#addError"></a>
-### formRenderer.addError([fieldName], error)
-Set a global error or a field error
-
-**Kind**: instance method of <code>[FormRenderer](#FormRenderer)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| [fieldName] | <code>string</code> | A field name |
-| error | <code>string</code> | The error |
-
-<a name="FormRenderer#errors"></a>
-### formRenderer.errors([fieldName]) ⇒ <code>Array.&lt;string&gt;</code>
-Retrieve a global error or a field error
-
-**Kind**: instance method of <code>[FormRenderer](#FormRenderer)</code>  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| [fieldName] | <code>string</code> | A field name |
+| result | <code>Boolean</code> | The result of the validation |
+| [value] | <code>\*</code> | The new value of the field |
 
 <a name="validateCallback"></a>
 ## validateCallback ⇒ <code>Boolean</code> \| <code>string</code>
@@ -725,6 +825,7 @@ Retrieve a global error or a field error
 
 | Param | Type | Description |
 | --- | --- | --- |
+| done | <code>[notifyResult](#notifyResult)</code> | Callback to send back the result |
 | value | <code>string</code> | Field's value |
 | [args] | <code>\*</code> | Validator arguments |
 

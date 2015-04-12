@@ -1,6 +1,10 @@
+'use strict';
+
 var Form = require('../index');
 var Field = Form.Field;
 var EmailField = Form.EmailField;
+var Errors = Form.Errors;
+var format = require('util').format;
 
 module.exports = {
     Form_empty: function (test) {
@@ -55,11 +59,12 @@ module.exports = {
                 Field({ name: 'bar' })
             ]
         });
-        var r = form.validate();
-        test.equals(r.valid, false);
-        test.equals(r.errors('foo')[0], Form.validators._required);
-        test.equals(r.errors('bar')[0], Form.validators._required);
-        test.done();
+        form.validate(function (vForm) {
+            test.equals(vForm.isValid(), false);
+            test.equals(vForm.errors('foo')[0], Errors._required);
+            test.equals(vForm.errors('bar')[0], Errors._required);
+            test.done();
+        });
     },
     Form_validate_body_1: function (test) {
         var form = Form({
@@ -68,13 +73,14 @@ module.exports = {
                 Field({ name: 'bar' })
             ]
         });
-        var r = form.validate({ foo: 'hello', 'bar': 'world' });
-        test.equals(r.valid, true);
-        test.equals(r.errors('foo').length, 0);
-        test.equals(r.errors('bar').length, 0);
-        test.equals(r.value('foo'), 'hello');
-        test.equals(r.value('bar'), 'world');
-        test.done();
+        form.validate({ foo: 'hello', 'bar': 'world' }, function (vForm) {
+            test.equals(vForm.isValid(), true);
+            test.equals(vForm.errors('foo').length, 0);
+            test.equals(vForm.errors('bar').length, 0);
+            test.equals(vForm.value('foo'), 'hello');
+            test.equals(vForm.value('bar'), 'world');
+            test.done();
+        });
     },
     Form_validate_body_2: function (test) {
         var form = Form({
@@ -83,13 +89,14 @@ module.exports = {
                 Field({ name: 'bar' }).isLength(3, 6).contains('orl')
             ]
         });
-        var r = form.validate({ foo: 'hello@world.com', 'bar': 'world' });
-        test.equals(r.valid, true);
-        test.equals(r.errors('foo').length, 0);
-        test.equals(r.errors('bar').length, 0);
-        test.equals(r.value('foo'), 'hello@world.com');
-        test.equals(r.value('bar'), 'world');
-        test.done();
+        form.validate({ foo: 'hello@world.com', 'bar': 'world' }, function (vForm) {
+            test.equals(vForm.isValid(), true);
+            test.equals(vForm.errors('foo').length, 0);
+            test.equals(vForm.errors('bar').length, 0);
+            test.equals(vForm.value('foo'), 'hello@world.com');
+            test.equals(vForm.value('bar'), 'world');
+            test.done();
+        });
     },
     Form_validate_body_3: function (test) {
         var form = Form({
@@ -98,13 +105,14 @@ module.exports = {
                 Field({ name: 'bar' }).isLength(3, 6).contains('orl')
             ]
         });
-        var r = form.validate({ foo: 'worldx', 'bar': 'world' });
-        test.equals(r.valid, false);
-        test.equals(r.errors('foo')[0], Form.validators.equals);
-        test.equals(r.errors('bar').length, 0);
-        test.equals(r.value('foo'), 'worldx');
-        test.equals(r.value('bar'), 'world');
-        test.done();
+        form.validate({ foo: 'worldx', 'bar': 'world' }, function (vForm) {
+            test.equals(vForm.isValid(), false);
+            test.equals(vForm.errors('foo')[0], Errors.equals('bar'));
+            test.equals(vForm.errors('bar').length, 0);
+            test.equals(vForm.value('foo'), 'worldx');
+            test.equals(vForm.value('bar'), 'world');
+            test.done();
+        });
     },
     Form_validate_body_4: function (test) {
         var form = Form({
@@ -113,13 +121,14 @@ module.exports = {
                 Field({ name: 'bar' }).isLength(3, 6).contains('orl')
             ]
         });
-        var r = form.validate({ foo: 'world', 'bar': 'world' });
-        test.equals(r.valid, true);
-        test.equals(r.errors('foo').length, 0);
-        test.equals(r.errors('bar').length, 0);
-        test.equals(r.value('foo'), 'world');
-        test.equals(r.value('bar'), 'world');
-        test.done();
+        form.validate({ foo: 'world', 'bar': 'world' }, function (vForm) {
+            test.equals(vForm.isValid(), true);
+            test.equals(vForm.errors('foo').length, 0);
+            test.equals(vForm.errors('bar').length, 0);
+            test.equals(vForm.value('foo'), 'world');
+            test.equals(vForm.value('bar'), 'world');
+            test.done();
+        });
     },
     Form_validate_body_5: function (test) {
         var form = Form({
@@ -128,13 +137,14 @@ module.exports = {
                 Field({ name: 'bar' }).isLength(3, 6).contains('orl')
             ]
         });
-        var r = form.validate({ foo: ' world      ', 'bar': 'world' });
-        test.equals(r.valid, true);
-        test.equals(r.errors('foo').length, 0);
-        test.equals(r.errors('bar').length, 0);
-        test.equals(r.value('foo'), 'world');
-        test.equals(r.value('bar'), 'world');
-        test.done();
+        form.validate({ foo: ' world      ', 'bar': 'world' }, function (vForm) {
+            test.equals(vForm.isValid(), true);
+            test.equals(vForm.errors('foo').length, 0);
+            test.equals(vForm.errors('bar').length, 0);
+            test.equals(vForm.value('foo'), 'world');
+            test.equals(vForm.value('bar'), 'world');
+            test.done();
+        });
     },
     Form_validate_body_with_optional_fields_1: function (test) {
         var form = Form({
@@ -144,13 +154,14 @@ module.exports = {
                 Field({ name: 'boo' }).optional().isEmail()
             ]
         });
-        var r = form.validate({ foo: 'hello', 'bar': 'hello' });
-        test.equals(r.valid, true);
-        test.equals(r.errors('foo').length, 0);
-        test.equals(r.errors('bar').length, 0);
-        test.equals(r.value('foo'), 'hello');
-        test.equals(r.value('bar'), 'hello');
-        test.done();
+        form.validate({ foo: 'hello', 'bar': 'hello' }, function (vForm) {
+            test.equals(vForm.isValid(), true);
+            test.equals(vForm.errors('foo').length, 0);
+            test.equals(vForm.errors('bar').length, 0);
+            test.equals(vForm.value('foo'), 'hello');
+            test.equals(vForm.value('bar'), 'hello');
+            test.done();
+        });
     },
     Form_validate_body_with_optional_fields_2: function (test) {
         var form = Form({
@@ -160,13 +171,14 @@ module.exports = {
                 Field({ name: 'boo' }).optional().isEmail()
             ]
         });
-        var r = form.validate({ foo: 'hello', bar: 'hello', boo: 'hello@world.com' });
-        test.equals(r.valid, true);
-        test.equals(r.errors('foo').length, 0);
-        test.equals(r.errors('bar').length, 0);
-        test.equals(r.value('foo'), 'hello');
-        test.equals(r.value('bar'), 'hello');
-        test.done();
+        form.validate({ foo: 'hello', bar: 'hello', boo: 'hello@world.com' }, function (vForm) {
+            test.equals(vForm.isValid(), true);
+            test.equals(vForm.errors('foo').length, 0);
+            test.equals(vForm.errors('bar').length, 0);
+            test.equals(vForm.value('foo'), 'hello');
+            test.equals(vForm.value('bar'), 'hello');
+            test.done();
+        });
     },
     Form_validate_body_with_optional_fields_3: function (test) {
         var form = Form({
@@ -176,15 +188,16 @@ module.exports = {
                 Field({ name: 'boo' }).optional().isEmail()
             ]
         });
-        var r = form.validate({ foo: 'hello', bar: 'hello', boo: 'hello' });
-        test.equals(r.valid, false);
-        test.equals(r.errors('foo').length, 0);
-        test.equals(r.errors('bar').length, 0);
-        test.equals(r.errors('boo')[0], Form.validators.isEmail);
-        test.equals(r.value('foo'), 'hello');
-        test.equals(r.value('bar'), 'hello');
-        test.equals(r.value('boo'), 'hello');
-        test.done();
+        form.validate({ foo: 'hello', bar: 'hello', boo: 'hello' }, function (vForm) {
+            test.equals(vForm.isValid(), false);
+            test.equals(vForm.errors('foo').length, 0);
+            test.equals(vForm.errors('bar').length, 0);
+            test.equals(vForm.errors('boo')[0], Errors.isEmail);
+            test.equals(vForm.value('foo'), 'hello');
+            test.equals(vForm.value('bar'), 'hello');
+            test.equals(vForm.value('boo'), 'hello');
+            test.done();
+        });
     },
     Form_validate_body_with_unknown_field: function (test) {
         var form = Form({
@@ -193,18 +206,19 @@ module.exports = {
                 Field({ name: 'bar' }).equals(Field('boo')),
             ]
         });
-        var r = form.validate({ foo: 'hello', bar: 'hello', boo: 'hello' });
-        test.equals(r.valid, false);
-        test.equals(r.errors()[0], Form.validators._unknownField);
-        test.equals(r.errors('foo').length, 0);
-        test.equals(r.errors('bar').length, 0);
-        test.equals(r.value('foo'), 'hello');
-        test.equals(r.value('bar'), 'hello');
-        test.done();
+        form.validate({ foo: 'hello', bar: 'hello', boo: 'hello' }, function (vForm) {
+            test.equals(vForm.isValid(), false);
+            test.equals(vForm.globalErrors()[0], Errors._unknownField);
+            test.equals(vForm.errors('foo').length, 0);
+            test.equals(vForm.errors('bar').length, 0);
+            test.equals(vForm.value('foo'), 'hello');
+            test.equals(vForm.value('bar'), 'hello');
+            test.done();
+        });
     },
     Form_add_simple_validator: function (test) {
-        Form.addValidator('is42', function (v) {
-            return v == 42;
+        Form.addValidator('is42', function (done, v) {
+            done(v === '42');
         }, 'error42');
 
         var form = Form({
@@ -213,17 +227,18 @@ module.exports = {
                 Field({ name: 'bar' }).is42()
             ]
         });
-        var r = form.validate({ foo: ' 42      ', 'bar': '42' });
-        test.equals(r.valid, true);
-        test.equals(r.errors('foo').length, 0);
-        test.equals(r.errors('bar').length, 0);
-        test.equals(r.value('foo'), '42');
-        test.equals(r.value('bar'), '42');
-        test.done();
+        form.validate({ foo: ' 42      ', 'bar': '42' }, function (vForm) {
+            test.equals(vForm.isValid(), true);
+            test.equals(vForm.errors('foo').length, 0);
+            test.equals(vForm.errors('bar').length, 0);
+            test.equals(vForm.value('foo'), '42');
+            test.equals(vForm.value('bar'), '42');
+            test.done();
+        });
     },
     Form_add_simple_validator_2: function (test) {
-        Form.addValidator('is42', function (v) {
-            return v == 42;
+        Form.addValidator('is42', function (done, v) {
+            done(v === '42');
         }, 'error42');
 
         var form = Form({
@@ -232,17 +247,18 @@ module.exports = {
                 Field({ name: 'bar' }).is42()
             ]
         });
-        var r = form.validate({ foo: ' 43      ', 'bar': '43' });
-        test.equals(r.valid, false);
-        test.equals(r.errors('foo').length, 0);
-        test.equals(r.errors('bar'), Form.validators.is42);
-        test.equals(r.value('foo'), '43');
-        test.equals(r.value('bar'), '43');
-        test.done();
+        form.validate({ foo: ' 43      ', 'bar': '43' }, function (vForm) {
+            test.equals(vForm.isValid(), false);
+            test.equals(vForm.errors('foo').length, 0);
+            test.equals(vForm.errors('bar'), Errors.is42);
+            test.equals(vForm.value('foo'), '43');
+            test.equals(vForm.value('bar'), '43');
+            test.done();
+        });
     },
     Form_add_validator_with_params: function (test) {
-        Form.addValidator('startsWith', function (v, s) {
-            return v[0] == s;
+        Form.addValidator('startsWith', function (done, v, s) {
+            done(v[0] === s);
         }, 'errorStartsWith');
 
         var form = Form({
@@ -251,17 +267,18 @@ module.exports = {
                 Field({ name: 'bar' }).startsWith('4')
             ]
         });
-        var r = form.validate({ foo: ' 42      ', 'bar': '42' });
-        test.equals(r.valid, true);
-        test.equals(r.errors('foo').length, 0);
-        test.equals(r.errors('bar').length, 0);
-        test.equals(r.value('foo'), '42');
-        test.equals(r.value('bar'), '42');
-        test.done();
+        form.validate({ foo: ' 42      ', 'bar': '42' }, function (vForm) {
+            test.equals(vForm.isValid(), true);
+            test.equals(vForm.errors('foo').length, 0);
+            test.equals(vForm.errors('bar').length, 0);
+            test.equals(vForm.value('foo'), '42');
+            test.equals(vForm.value('bar'), '42');
+            test.done();
+        });
     },
     Form_add_validator_with_params_2: function (test) {
-        Form.addValidator('startsWith', function (v, s) {
-            return v[0] == s;
+        Form.addValidator('startsWith', function (done, v, s) {
+            done(v[0] === s);
         }, 'errorStartsWith');
 
         var form = Form({
@@ -270,13 +287,35 @@ module.exports = {
                 Field({ name: 'bar' }).startsWith('4')
             ]
         });
-        var r = form.validate({ foo: ' 69      ', 'bar': '69' });
-        test.equals(r.valid, false);
-        test.equals(r.errors('foo').length, 0);
-        test.equals(r.errors('bar'), Form.validators.startsWith);
-        test.equals(r.value('foo'), '69');
-        test.equals(r.value('bar'), '69');
-        test.done();
+        form.validate({ foo: ' 69      ', 'bar': '69' }, function (vForm) {
+            test.equals(vForm.isValid(), false);
+            test.equals(vForm.errors('foo').length, 0);
+            test.equals(vForm.errors('bar'), Errors.startsWith);
+            test.equals(vForm.value('foo'), '69');
+            test.equals(vForm.value('bar'), '69');
+            test.done();
+        });
+    },
+    Form_add_validator_with_params_and_error_function: function (test) {
+        Form.addValidator('startsWith', function (done, v, s) {
+            done(v[0] === s);
+        }, function (v) {
+            return format('This should start with %s', v);
+        });
+        var form = Form({
+            fields: [
+                Field({ name: 'foo' }).trim().equals(Field('bar')),
+                Field({ name: 'bar' }).startsWith('4')
+            ]
+        });
+        form.validate({ foo: ' 69      ', 'bar': '69' }, function (vForm) {
+            test.equals(vForm.isValid(), false);
+            test.equals(vForm.errors('foo').length, 0);
+            test.equals(vForm.errors('bar'), Errors.startsWith('4'));
+            test.equals(vForm.value('foo'), '69');
+            test.equals(vForm.value('bar'), '69');
+            test.done();
+        });
     },
     Form_with_EmailField: function (test) {
         var form = Form({
@@ -285,13 +324,14 @@ module.exports = {
                 Field({ name: 'bar' }).isLength(3, 6).contains('orl')
             ]
         });
-        var r = form.validate({ foo: 'hello@world.com', 'bar': 'world' });
-        test.equals(r.valid, true);
-        test.equals(r.errors('foo').length, 0);
-        test.equals(r.errors('bar').length, 0);
-        test.equals(r.value('foo'), 'hello@world.com');
-        test.equals(r.value('bar'), 'world');
-        test.done();
+        form.validate({ foo: 'hello@world.com', 'bar': 'world' }, function (vForm) {
+            test.equals(vForm.isValid(), true);
+            test.equals(vForm.errors('foo').length, 0);
+            test.equals(vForm.errors('bar').length, 0);
+            test.equals(vForm.value('foo'), 'hello@world.com');
+            test.equals(vForm.value('bar'), 'world');
+            test.done();
+        });
     },
     Form_with_EmailField_2: function (test) {
         var form = Form({
@@ -300,134 +340,106 @@ module.exports = {
                 Field({ name: 'bar' }).isLength(3, 6).contains('orl')
             ]
         });
-        var r = form.validate({ foo: 'hello%world.com', 'bar': 'world' });
-        test.equals(r.valid, false);
-        test.equals(r.errors('foo')[0], Form.validators.isEmail);
-        test.equals(r.errors('bar').length, 0);
-        test.equals(r.value('foo'), 'hello%world.com');
-        test.equals(r.value('bar'), 'world');
-        test.done();
+        form.validate({ foo: 'hello%world.com', 'bar': 'world' }, function (vForm) {
+            test.equals(vForm.isValid(), false);
+            test.equals(vForm.errors('foo')[0], Errors.isEmail);
+            test.equals(vForm.errors('bar').length, 0);
+            test.equals(vForm.value('foo'), 'hello%world.com');
+            test.equals(vForm.value('bar'), 'world');
+            test.done();
+        });
     },
-    Form_with_array_named_fields: function (test) {
+    Form_clone: function (test) {
         var form = Form({
+            hello: 'world',
             fields: [
-                Field({ name: 'user[login][username]' }),
-                Field({ name: 'user[login][email]' }),
-                Field({ name: 'user[password]' }),
-                Field({ name: 'user[info][name][firstname]' }),
-                Field({ name: 'user[info][name][lastname]' }),
-                Field({ name: 'user[info][sex]' }),
-                Field({ name: 'lang' }),
+                EmailField({ name: 'foo' }),
+                Field({ name: 'bar' }).isLength(3, 6).contains('orl')
             ]
         });
-
-        var body = {
-            user: {
-                login: {
-                    username: 'chucky',
-                    email: 'chucky@nomail.com'
-                },
-                password: '123456',
-                info: {
-                    name: {
-                        firstname: 'Chuck',
-                        lastname: 'Norris'
-                    },
-                    sex: 'M'
-                },
-            },
-            lang: 'en'
-        };
-        var r = form.validate(body);
-        test.equals(r.value('user[login][username]'), 'chucky');
-        test.equals(r.value('user[login][email]'), 'chucky@nomail.com');
-        test.equals(r.value('user[password]'), '123456');
-        test.equals(r.value('user[info][name][firstname]'), 'Chuck');
-        test.equals(r.value('user[info][name][lastname]'), 'Norris');
-        test.equals(r.value('user[info][sex]'), 'M');
-        test.equals(r.value('lang'), 'en');
+        var clone = form.clone();
+        test.equals(form._fields.length, clone._fields.length);
+        test.equals(clone._options.hello, 'world');
         test.done();
     },
-    Form_with_array_named_fields_validators: function (test) {
-        var form = Form({
-            fields: [
-                Field({ name: 'user[login][username]' }).isAlphanumeric(),
-                Field({ name: 'user[login][email]' }).isEmail(),
-                Field({ name: 'user[password]' }).isLength(5, 30),
-                Field({ name: 'user[info][name][firstname]' }).trim().matches('[A-Z][a-zA-Z]+'),
-                Field({ name: 'user[info][name][lastname]' }).trim().matches('[A-Z][a-zA-Z]+'),
-                Field({ name: 'user[info][sex]' }).isIn(['M', 'F']),
-                Field({ name: 'lang' }).isIn(['en', 'fr']),
-            ]
-        });
-
-        var body = {
-            user: {
-                login: {
-                    username: 'chucky',
-                    email: 'chucky@nomail.com'
-                },
-                password: '123456',
-                info: {
-                    name: {
-                        firstname: '   Chuck ',
-                        lastname: 'Norris '
-                    },
-                    sex: 'M'
-                },
-            },
-            lang: 'en'
-        };
-        var r = form.validate(body);
-        test.equals(r.value('user[login][username]'), 'chucky');
-        test.equals(r.value('user[login][email]'), 'chucky@nomail.com');
-        test.equals(r.value('user[password]'), '123456');
-        test.equals(r.value('user[info][name][firstname]'), 'Chuck');
-        test.equals(r.value('user[info][name][lastname]'), 'Norris');
-        test.equals(r.value('user[info][sex]'), 'M');
-        test.equals(r.value('lang'), 'en');
-        test.equals(r.valid, true);
+    Form_clone_global_error: function (test) {
+        var form = Form();
+        var clone = form.clone();
+        clone.addGlobalError('hello');
+        test.equals(form._errors.length, 0);
+        test.equals(clone._errors.length, 1);
+        test.equals(clone._errors[0], 'hello');
         test.done();
     },
-    Form_with_array_named_fields_validators: function (test) {
+    Form_clone_with_values: function (test) {
         var form = Form({
             fields: [
-                Field({ name: 'user[login][username]' }).isAlphanumeric(),
-                Field({ name: 'user[login][email]' }).isEmail(),
-                Field({ name: 'user[password]' }).isLength(5, 30),
-                Field({ name: 'user[info][name][firstname]' }).trim().matches('[A-Z][a-zA-Z]+'),
-                Field({ name: 'user[info][name][lastname]' }).trim().matches('[A-Z][a-zA-Z]+'),
-                Field({ name: 'user[info][sex]' }).isIn(['M', 'F']),
-                Field({ name: 'lang' }).isIn(['en', 'fr']),
+                Field({ name: 'foo', value: 'foz' }),
+                Field({ name: 'bar', value: 'baz' })
             ]
         });
-
-        var body = {
-            user: {
-                login: {
-                    username: 'chucky',
-                    email: 'chucky%nomail.com'
-                },
-                password: '123456',
-                info: {
-                    name: {
-                        firstname: 'Chuck',
-                        lastname: 'Norris'
-                    },
-                    sex: 'M'
-                },
-            },
-            lang: 'en'
-        };
-        var r = form.validate(body);
-        test.equals(r.value('user[login][username]'), 'chucky');
-        test.equals(r.errors('user[login][email]')[0], Form.validators.isEmail);
-        test.equals(r.value('user[password]'), '123456');
-        test.equals(r.value('user[info][name][firstname]'), 'Chuck');
-        test.equals(r.value('user[info][name][lastname]'), 'Norris');
-        test.equals(r.value('user[info][sex]'), 'M');
-        test.equals(r.value('lang'), 'en');
-        test.equals(r.valid, false);
+        var clone = form.clone();
+        form.setValue('foo', 'changed');
+        test.equals(clone.value('foo'), 'foz');
+        test.equals(form.value('foo'), 'changed');
+        test.done();
+    },
+    Form_render_with_refresh: function (test) {
+        var form = Form({
+            hello: 'world',
+            fields: [
+                EmailField({ name: 'foo' }),
+                Field({ name: 'bar' }).isLength(3, 6).contains('orl')
+            ]
+        });
+        test.equals(form.render().fields.length, 2);
+        form.addField(Field({ name: 'baz' }));
+        test.equals(form.render().fields.length, 3);
+        test.done();
+    },
+    Form_render_with_global_errors: function (test) {
+        var form = Form({
+            fields: [
+                EmailField({ name: 'foo' }),
+                Field({ name: 'bar' }).isLength(3, 6).contains('orl')
+            ]
+        });
+        form.addGlobalError('Oh no!');
+        form.refresh();
+        test.equals(form.render().errors[0], 'Oh no!');
+        test.done();
+    },
+    Form_render_with_values: function (test) {
+        var form = Form({
+            fields: [
+                Field({ name: 'foo' }),
+                Field({ name: 'bar' }).isLength(3, 6).contains('orl')
+            ]
+        });
+        var r = form.renderWith({ foo: 'foo@bar.com' });
+        test.equals(r.fields[0].value, 'foo@bar.com');
+        var r2 = form.render();
+        test.equals(r2.fields[0].value, '');
+        test.done();
+    },
+    Form_render_with_custom_properties: function (test) {
+        var form = Form({
+            fields: [
+                Field({ name: 'foo' }),
+                Field({ name: 'bar' }).isLength(3, 6).contains('orl')
+            ]
+        });
+        var r = form.render({
+            foo: { hello: 'world' },
+            bar: { value: 'world', custom: 'baz' }
+        });
+        test.equals(r.fields[0].hello, 'world');
+        test.equals(r.fields[1].value, 'world');
+        test.equals(r.fields[1].custom, 'baz');
+        var r2 = form.render();
+        test.equals(r2.fields[0].hello, undefined);
+        test.equals(r2.fields[1].value, '');
+        test.equals(r2.fields[1].custom, undefined);
         test.done();
     }
 };

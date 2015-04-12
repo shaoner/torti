@@ -4,6 +4,7 @@
   "description": "Form generator and validator",
   "main": "index.js",
   "scripts": {
+    "lint": "./node_modules/jshint/bin/jshint index.js lib tests",
     "test": "./run-tests.js"
   },
   "repository": {
@@ -23,9 +24,11 @@
   },
   "dependencies": {
     "validator": "~3.33.0",
-    "lodash": "~3.4.0"
+    "lodash": "~3.4.0",
+    "bluebird": "~2.9.24"
   },
   "devDependencies": {
-    "nodeunit": "~0.9.1"
+    "nodeunit": "~0.9.1",
+    "jshint": "~2.6.3"
   }
 }
