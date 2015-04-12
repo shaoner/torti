@@ -86,11 +86,13 @@ You can also add your own validator, here is a naive example:
 
 Form.addValidator('is42', function (done, value) {
     done(value == '42');
-}, 'error42');
+}, 'This value should be 42');
 
 Form.addValidator('startsWith', function (done, value, comparison) {
     done(value[0] == comparison);
-}, 'errorStartsWith');
+}, function (comparison) {
+    return 'This field should start with ' + comparison;
+});
 
 var myFields = [
     Field({ name: 'foo' }).is42(),
@@ -109,10 +111,12 @@ Sanitizers are almost the same, except that you can update the value:
 ```javascript
 Form.addValidator('toLowerCase', function (done, value) {
     done(true, value.toLowerCase());
-}, 'errorStartsWith');
+});
 ```
 
-You can also modify the value in your validator:
+No error was passed for this sanitizer since it just modifies the value, it does not check the value consistency here.
+
+But you can also create a validator that actually modifies the value:
 
 ```javascript
 Form.addValidator('is42andIncrement', function (done, value) {
@@ -221,13 +225,106 @@ form.validate({
         hello: 'World',
         fields: [
             { name: 'email', foo: 'bar', value: 'shaoner@nomail.com', errors: [] },
-            { name: 'username', bar: 'foo', value: 'foo', errors: [ 'length' ] }
+            { name: 'username', bar: 'foo', value: 'foo', errors: [ 'This should be between 15 and 50 characters' ] }
         ],
         valid: false,
         errors: []
     }
     */
 });
+```
+
+### 7. Customizing errors
+
+[Errors](lib/README.md#Errors) are mapped in a simple object which keys are the validator names and values are either a string or a function that returns string.
+
+You can customize errors that way:
+
+```javascript
+var Form = require('torti');
+
+// Override some of the error messages
+Form.Errors.isEmail = 'Wrong email address';
+Form.Errors.isIP = function (version) {
+    if (version === 6) {
+        return 'Wrong IPv6 address';
+    }
+    return 'Wrong IP address';
+};
+
+// Override all
+Form.Errors = {
+    _required:          'This field is required',
+    _unknownField:      'Unknown field',
+    matches:            'Invalid format',
+    isEmail:            'Invalid email address',
+    isURL:              'Invalid URL',
+    isFQDN:             'Invalid domain name',
+    isIP:               'Invalid IP address',
+    isAlpha:            'This should only contain alphabetical characters',
+    isNumeric:          'This should only contain numerical characters',
+    isAlphanumeric:     'This should only contain alphanumerical characters',
+    isBase64:           'Invalid base64 value',
+    isHexadecimal:      'Invalid hexadecimal value',
+    isLowercase:        'This should be lowercase',
+    isUppercase:        'This should be uppercase',
+    isInt:              'This should be an integer',
+    isFloat:            'This should be a float',
+    isUUID:             'Invalid uid',
+    isDate:             'Invalid date format',
+    isIn:               'Invalid choice',
+    isCreditCard:       'This is not a valid credit card number',
+    isISBN:             'Invalid ISBN',
+    isMobilePhone:      'Invalid phone number',
+    isJSON:             'JSON is expected',
+    isAscii:            'This must contain only ascii characters',
+    isMongoId:          'Invalid mongo ObjectId',
+    isCurrency:         'Invalid currency',
+    equals: function (comparison) {
+        return format('It should equal %s', comparison);
+    },
+    contains: function (seed) {
+        return format('It should contain %s', seed);
+    },
+    isLength: function (min, max) {
+        if (arguments.length > 1) {
+            return format('This should be between %d and %d characters',
+                          min, max);
+        }
+        return format('This should be at least %d characters', min);
+    },
+    isByteLength: function (min, max) {
+        if (arguments.length > 1) {
+            return format('This should be between %d and %d bytes',
+                          min, max);
+        }
+        return format('This should be at least %d bytes', min);
+    },
+    isAfter: function (date) {
+        return format('This should be after %s', date);
+    },
+    isBefore: function (date) {
+        return format('This should be after %s', date);
+    },
+    toString:           null,
+    toDate:             null,
+    toFloat:            null,
+    toInt:              null,
+    toBoolean:          null,
+    trim:               null,
+    ltrim:              null,
+    rtrim:              null,
+    escape:             null,
+    stripLow:           null,
+    whitelist:          null,
+    blacklist:          null,
+    normalizeEmail:     null,
+    capitalize:         null,
+    trunc:              null,
+    lower:              null,
+    upper:              null
+};
+
 ```
 
 ## Some examples
@@ -295,7 +392,7 @@ signupForm.validate(body, function (form) {
                  { name: 'email', value: 'foo@bar.com', errors: [] },
                  { name: 'password', value: '123456', errors: [] },
                  { name: 'password2', value: '123456', errors: [] },
-                 { name: 'username' }, value: '$$$$$$', errors: [ 'format' ] ],
+                 { name: 'username' }, value: '$$$$$$', errors: [ 'Invalid format' ] ],
              valid: false
          }
        */
