@@ -11,7 +11,7 @@
 </dl>
 ## Members
 <dl>
-<dt><a href="#Errors">Errors</a> : <code>string</code></dt>
+<dt><a href="#Errors">Errors</a> : <code>string</code> | <code>function</code></dt>
 <dd></dd>
 <dt><a href="#FieldValidators">FieldValidators</a> : <code><a href="#validateCallback">validateCallback</a></code></dt>
 <dd></dd>
@@ -802,10 +802,10 @@ Add a new validator
 | --- | --- | --- |
 | name | <code>string</code> | Name of the validator |
 | fn | <code>[validateCallback](#validateCallback)</code> | The validator callback |
-| error | <code>string</code> | The error message |
+| error | <code>string</code> \| <code>function</code> | The error message |
 
 <a name="Errors"></a>
-## Errors : <code>string</code>
+## Errors : <code>string</code> \| <code>function</code>
 **Kind**: global enum  
 <a name="FieldValidators"></a>
 ## FieldValidators : <code>[validateCallback](#validateCallback)</code>
