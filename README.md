@@ -1,10 +1,10 @@
 # torti
 Form generator that can be validated, sanitized and extended for node.js
 
-[![npm](https://img.shields.io/npm/v/torti.svg?style=flat-square)]()
-[![Travis branch](https://img.shields.io/travis/shaoner/torti/master.svg?style=flat-square)]()
-[![npm](https://img.shields.io/npm/l/torti.svg?style=flat-square)]()
-[![npm](https://img.shields.io/npm/dm/torti.svg?style=flat-square)]()
+[![npm](https://img.shields.io/npm/v/torti.svg?style=flat-square)](https://www.npmjs.com/package/torti)
+[![Travis branch](https://img.shields.io/travis/shaoner/torti/master.svg?style=flat-square)](https://travis-ci.org/shaoner/torti)
+[![npm](https://img.shields.io/npm/l/torti.svg?style=flat-square)](https://www.npmjs.com/package/torti)
+[![npm](https://img.shields.io/npm/dm/torti.svg?style=flat-square)](https://www.npmjs.com/package/torti)
 
 ## Install
 
@@ -14,7 +14,7 @@ npm install torti
 
 ## API
 
-Documentation is [here](lib/README.md)
+API documentation is [here](lib/README.md)
 
 ## Getting started
 
@@ -83,12 +83,9 @@ myForm.validate(data, function (form) {
 FieldValidators is a simple object with a string key matching the validator name and its corresponding asynchroneous function.
 For now, this object is global and cannot be defined for each Form, however you can add your own global validators using [addValidator](lib/README.md#Form.addValidator).
 
-Because of how internationalization works in [dust](https://github.com/linkedin/dustjs), I didn't want to put explicit error messages, but you're free to do it.
-
-You can also add your own validator, here is a naive example:
+You can also add your own validator, here are some examples:
 
 ```javascript
-
 Form.addValidator('is42', function (done, value) {
     done(value == '42');
 }, 'This value should be 42');
@@ -107,7 +104,7 @@ var myFields = [
 ```
 
 As you may have noticed, validators are passed:
-* A callback to send back true or false
+* A callback to send back a boolean indicating the validation result as well as the modified value if necessary
 * The value
 * Optional arguments that are passed during the validator call (see *startsWith('H')*)
 
@@ -119,7 +116,7 @@ Form.addValidator('toLowerCase', function (done, value) {
 });
 ```
 
-No error was passed for this sanitizer since it just modifies the value, it does not check the value consistency here.
+No error was passed for this sanitizer since it just modifies the value, it does not need to check the value consistency here.
 
 But you can also create a validator that actually modifies the value:
 
@@ -155,6 +152,7 @@ myForm.validate(data)
     }).catch(Form.ValidationError, function (err) {
         var form = err.form;
         console.log('This form is not valid and contains some validation errors.');
+        console.log(form.errors());
     });
 ```
 
@@ -162,18 +160,20 @@ Take a look at [bluebird](https://github.com/petkaantonov/bluebird) if you're no
 
 ### 6. Rendering
 
-The form is rendered as a javascript object using the [render](lib/README.md#Form#render) method of Form class.
+The form is rendered as a javascript object using the [render](lib/README.md#Form#render) method of the Form class.
 
-Why not HTML?
+*Why not HTML?*
 
-Because I think HTML has nothing to do with this part of the code, HTML is just a way to display the form. Moreover you may want to display your forms differently according to the page or use JSON.
+Because I think HTML has nothing to do with this part of the code, and displaying a form is up to you.
+You may want to display your forms differently according to the page or use JSON.
 This allows to customize the way you want to actually render it in your templates.
 
-The rendered object contains:
+The form object contains:
 * All the properties you passed in the [Form constructor](lib/README.md#new_Form_new).
 * A property *errors*, which is an array of global errors.
 * A property *valid*, which is a simple boolean saying if the form is valid or not.
 * A property *fields* which is an array of field objects.
+
 A field object contains:
 * All the properties you passed in the [Field constructor](lib/README.md#new_Field_new).
 * A property *name*, which is the name of the field
@@ -241,7 +241,7 @@ form.validate({
 
 ### 7. Customizing errors
 
-[Errors](lib/README.md#Errors) are mapped in a simple object which keys are the validator names and values are either a string or a function that returns string.
+[Errors](lib/README.md#Errors) are mapped in a simple object which keys are the validator names and values are either a string or a function that returns a string.
 
 You can customize errors that way:
 
@@ -257,8 +257,8 @@ Form.Errors.isIP = function (version) {
     return 'Wrong IP address';
 };
 
-// Override all
-Form.Errors = {
+// Override all using lodash
+Form.Errors = _.merge(Form.Errors, {
     _required:          'This field is required',
     _unknownField:      'Unknown field',
     matches:            'Invalid format',
@@ -420,7 +420,6 @@ First you define a form partial matching our render object.
 ```html
 {#form}
     <form method="{method}" action="{action}">
-        {>"partials/form-fields/csrf"/}
         {#fields}
             {>"partials/form-fields/{partial}"/}
             {#errors}
@@ -472,6 +471,7 @@ var signupForm = Form({
     method: 'POST',
     action: '/signup',
     fields: [
+        Field({ name: '_csrf', partial: 'csrf' }),
         Field({ name: 'email', partial: 'email', 'autocomplete': 'off' }).trim().isEmail()
         Field({ name: 'password', partial: 'password' }).isLength(6, 25),
         Field({ name: 'password2', partial: 'password' }).equals(Field('password')),
@@ -539,7 +539,3 @@ npm test
 ## Contributing
 
 Contributions are most welcome, so feel free to fork and improve.
-
-## LICENSE
-
-BSD
