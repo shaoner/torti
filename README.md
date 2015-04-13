@@ -310,24 +310,7 @@ Form.Errors = {
     },
     isBefore: function (date) {
         return format('This should be after %s', date);
-    },
-    toString:           null,
-    toDate:             null,
-    toFloat:            null,
-    toInt:              null,
-    toBoolean:          null,
-    trim:               null,
-    ltrim:              null,
-    rtrim:              null,
-    escape:             null,
-    stripLow:           null,
-    whitelist:          null,
-    blacklist:          null,
-    normalizeEmail:     null,
-    capitalize:         null,
-    trunc:              null,
-    lower:              null,
-    upper:              null
+    }
 };
 
 ```
